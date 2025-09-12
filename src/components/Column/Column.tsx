@@ -6,15 +6,13 @@ import React from "react";
 interface ColumnProps {
   columnId: string;
   cards?: ICard[] | null;
-  draggedStack?: ICard[] | null;
-  isValidDrag: boolean;
 }
 
 /**
  * Représente une seule colonne sur le plateau de jeu.
  * C'est une zone "déposable" (droppable) qui contient une liste de cartes.
  */
-function ColumnComponent({ columnId, cards, draggedStack, isValidDrag }: ColumnProps) {
+function ColumnComponent({ columnId, cards }: ColumnProps) {
   const { setNodeRef } = useDroppable({ id: columnId });
 
   const getMarginTop = (card: ICard, index: number) => {
@@ -35,8 +33,6 @@ function ColumnComponent({ columnId, cards, draggedStack, isValidDrag }: ColumnP
               id={card.id}
               value={card.value}
               faceUp={card.faceUp}
-              draggedStack={draggedStack}
-              isValidDrag={isValidDrag}
             />
           </div>
         ))}

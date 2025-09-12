@@ -1,11 +1,8 @@
 import Header from "./components/Header/Header";
 import { useEffect } from "react";
 import { useColumnsStore } from "./stores/ColumnStore";
-import { Board } from "./components/Board/Board";
 import { useGameStatsStore } from "./stores/GameStatsStore";
-import Dashboard from "./components/Dashboard/Dashboard";
-import Stock from "./components/Stock/Stock";
-import Foundation from "./components/Foundation/Foundation";
+import { GameSurface } from "./components/GameSurface/GameSurface";
 
 function App() {
   const initGame = useColumnsStore((state) => state.initGame);
@@ -23,14 +20,7 @@ function App() {
   return (
     <>
       <Header />
-      <main className="bg-green-300 h-[calc(100vh-32px)] w-full relative">
-        <div className="py-4 px-8 h-full">
-          <Board />
-        </div>
-        <Foundation />
-        <Dashboard />
-        <Stock />
-      </main>
+      <GameSurface />
     </>
   );
 }

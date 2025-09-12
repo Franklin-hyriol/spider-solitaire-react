@@ -1,5 +1,5 @@
 import { FaSlidersH } from "react-icons/fa";
-// import TimerStat from "../TimerStat/TimerStat";
+import TimerStat from "../TimerStat/TimerStat";
 import MoneyStat from "../MoneyStat/MoneyStat";
 import MovesStat from "../MovesStat/MovesStat";
 import MoodStat from "../MoodStat/MoodStat";
@@ -18,7 +18,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-2 gap-2 flex-1">
         <MoneyStat />
         <MovesStat />
-        {/* <TimerStat /> */}
+        <TimerStat />
         <CompletedSetsStat />
         <MoodStat />
       </div>
