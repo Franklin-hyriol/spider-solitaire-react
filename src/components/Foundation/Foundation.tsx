@@ -15,10 +15,10 @@ function FoundationPile({ id, cards }: IColumn) {
   return (
     <div
       ref={setNodeRef}
-      className="w-30 h-40 border-2 border-dashed border-gray-500 rounded-md bg-black/10"
+      className="w-30 h-43 border-2 border-dashed border-gray-500 rounded-md bg-black/10"
     >
       {/* Affiche la carte du dessus si la pile n'est pas vide */}
-      {topCard && <Card {...topCard} draggedStack={null} isValidDrag={false} />}
+      {topCard && <Card {...topCard} />}
     </div>
   );
 }
