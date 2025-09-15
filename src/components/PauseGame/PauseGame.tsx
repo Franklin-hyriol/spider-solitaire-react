@@ -1,34 +1,21 @@
-import { useState } from "react";
-import Popup from "../Popup/Popup";
+type PauseGameProps = {
+  onContinue: () => void;
+};
 
-export default function PauseGame() {
-  const [open, setOpen] = useState(true);
-
-  const onConfirm = () => {
-    console.log("Action confirmée !");
-    setOpen(false); // ferme le popup
-  };
-
-  const onCancel = () => {
-    setOpen(false); // ferme le popup
-  };
-
+export default function PauseGame({ onContinue }: PauseGameProps) {
   return (
-    <Popup open={open} setOpen={setOpen} closeOnOverlayClick={true}>
-      <div className="bg-white p-6 rounded-xl flex flex-col gap-4">
-        <p>Es-tu sûr de vouloir continuer ?</p>
-        <div className="flex justify-end gap-2">
-          <button className="px-4 py-2 bg-gray-300 rounded" onClick={onCancel}>
-            Annuler
-          </button>
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded"
-            onClick={onConfirm}
-          >
-            Confirmer
-          </button>
-        </div>
+    <div className="max-w-md w-[448px] h-fit p-8 flex flex-col items-center gap-4">
+      <h2 className="w-full text-center text-3xl font-bold text-emerald-800 mb-4 pb-4 border-b-4 border-emerald-600">Jeu en Pause</h2>
+
+      <div className="flex gap-1 mb-6">
+        <div className="w-8 h-12 bg-red-500 rounded border-2 border-gray-800 shadow-lg transform -rotate-12"></div>
+        <div className="w-8 h-12 bg-gray-800 rounded border-2 border-white shadow-lg transform rotate-6"></div>
+        <div className="w-8 h-12 bg-red-500 rounded border-2 border-gray-800 shadow-lg transform -rotate-3"></div>
       </div>
-    </Popup>
+
+      <button onClick={onContinue} className="btn btn-dash btn-primary w-full">Reprendre</button>
+      <button className="btn btn-dash btn-secondary w-full">Recommencer</button>
+      <button className="btn btn-dash btn-tertiary w-full">Nouvelle Partie</button>
+    </div>
   );
 }

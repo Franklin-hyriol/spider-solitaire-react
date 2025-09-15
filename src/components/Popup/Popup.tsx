@@ -56,7 +56,7 @@ const Popup: React.FC<PopupProps> = ({
 
       {/* Container centré du popup */}
       <div
-        className={`relative z-10 max-w-full max-h-full overflow-auto rounded-2xl shadow-2xl p-4 ${className}`}
+        className={`relative z-10 max-w-full max-h-full overflow-auto rounded-2xl shadow-2xl border-4 border-emerald-600 bg-white ${className}`}
       >
         {children}
       </div>
