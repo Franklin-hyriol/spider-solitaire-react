@@ -70,3 +70,10 @@ export const PlayerMood = {
 } as const;
 
 export type PlayerMood = typeof PlayerMood[keyof typeof PlayerMood];
+
+
+// Type pour les popups
+export type PopupType = "new" | "pause" | "quit" | boolean;
+
+// Niveaux de difficulté
+export type Level = "easy" | "medium" | "hard";
