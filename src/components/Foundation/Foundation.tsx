@@ -7,7 +7,7 @@ import Card from "../Card/Card";
  * Représente une seule pile de fondation.
  * C'est une zone où une suite de cartes complétée peut être déposée.
  */
-function FoundationPile({ id, cards }: IColumn) {
+function FoundationPile({ id, cards, className = "" }: IColumn & { className?: string }) {
   const { setNodeRef } = useDroppable({ id });
 
   const topCard = cards?.[0];
@@ -15,7 +15,7 @@ function FoundationPile({ id, cards }: IColumn) {
   return (
     <div
       ref={setNodeRef}
-      className="w-30 h-43 border-2 border-dashed border-gray-500 rounded-md bg-black/10"
+      className={`w-30 h-43 ${className}`}
     >
       {/* Affiche la carte du dessus si la pile n'est pas vide */}
       {topCard && <Card {...topCard} />}
@@ -30,9 +30,9 @@ function Foundation() {
   const foundationPiles = useColumnsStore((state) => state.foundation);
 
   return (
-    <div className="flex flex-row absolute bottom-5 left-8 gap-4">
-      {foundationPiles.map((pile) => (
-        <FoundationPile key={pile.id} id={pile.id} cards={pile.cards} />
+    <div className="flex flex-row absolute bottom-5 left-8">
+      {foundationPiles.map((pile, index) => (
+        <FoundationPile key={pile.id} id={pile.id} cards={pile.cards} className={index === 0 ? "" : "-ml-24"} />
       ))}
     </div>
   );
