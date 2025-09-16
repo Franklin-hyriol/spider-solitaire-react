@@ -6,13 +6,11 @@ import {
   BsGraphUp,
   BsNewspaper,
 } from "react-icons/bs";
-import { PopupType } from "../../types";
+import { usePopupStore } from "../../stores/PopupStore";
 
-type HeaderProps = {
-  setOpen: (type: PopupType) => void;
-};
+function Header() {
+  const openPopup = usePopupStore((state) => state.open);
 
-function Header({ setOpen }: HeaderProps) {
   const handleMenuClick = (callback?: () => void) => {
     if (callback) {
       callback();
@@ -45,7 +43,7 @@ function Header({ setOpen }: HeaderProps) {
                 <li>
                   <button
                     className="hover:text-primary"
-                    onClick={() => handleMenuClick(() => setOpen("new"))}
+                    onClick={() => handleMenuClick(() => openPopup("new"))}
                   >
                     <BsNewspaper className="mr-2" />
                     Nouvelle Partie

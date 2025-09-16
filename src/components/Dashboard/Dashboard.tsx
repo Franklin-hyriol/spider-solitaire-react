@@ -4,27 +4,8 @@ import MoneyStat from "../MoneyStat/MoneyStat";
 import MovesStat from "../MovesStat/MovesStat";
 import MoodStat from "../MoodStat/MoodStat";
 import CompletedSetsStat from "../CompletedSetsStat/CompletedSetsStat";
-import { useState } from "react";
-import Popup from "../Popup/Popup";
-import PauseGame from "../PauseGame/PauseGame";
-import { useGameStatsStore } from "../../stores/GameStatsStore";
 
 export default function Dashboard() {
-  const [pauseGame, setPauseGame] = useState(false);
-
-  const pause = useGameStatsStore((state) => state.pause);
-  const resume = useGameStatsStore((state) => state.resume);
-
-  const handlePauseGame = () => {
-    if(!pauseGame) {
-      // On met en pause le temps
-      pause();
-    } else {
-      resume();
-    }
-    setPauseGame(!pauseGame);
-  };
-
   return (
     <>
       <div className="w-96 h-fit bg-blue-200 flex flex-col gap-2 p-3 absolute bottom-5 left-[50%] transform-[translateX(-50%)] rounded-md shadow-md">
@@ -38,16 +19,11 @@ export default function Dashboard() {
         <div className="grid grid-cols-2 gap-2 flex-1">
           <MoneyStat />
           <MovesStat />
-          <TimerStat pauseGame={handlePauseGame} />
+          <TimerStat />
           <CompletedSetsStat />
           <MoodStat />
         </div>
       </div>
-
-      {/* Pause/Resume popup */}
-      <Popup open={pauseGame} setOpen={setPauseGame} closeOnOverlayClick={false}>
-        <PauseGame onContinue={handlePauseGame} />
-      </Popup>
     </>
   );
 }
