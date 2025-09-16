@@ -2,8 +2,15 @@ import { useEffect } from "react";
 import Stat from "../Stat/Stat";
 import { MdTimer } from "react-icons/md";
 import { useGameStatsStore } from "../../stores/GameStatsStore";
+import { IoMdPause } from "react-icons/io";
 
-export default function TimerStat() {
+import { usePopupStore } from "../../stores/PopupStore";
+
+type TimerStatProps = {};
+
+export default function TimerStat({}: TimerStatProps) {
+  const openPopup = usePopupStore((state) => state.open);
+
   // Récupération des états et actions depuis le store
   const elapsedTime = useGameStatsStore((state) => state.elapsedTime);
   const isRunning = useGameStatsStore((state) => state.isRunning);
@@ -33,10 +40,21 @@ export default function TimerStat() {
   const secs = (elapsedTime % 60).toString().padStart(2, "0");
 
   return (
-    <Stat
-      icon={MdTimer}
-      label="Temps écoulé"
-      value={`${hrs}:${mins}:${secs}`}
-    />
+    <div className="relative">
+      <Stat
+        icon={MdTimer}
+        label="Temps écoulé"
+        value={`${hrs}:${mins}:${secs}`}
+      />
+
+      <button
+        className="btn btn-primary btn-sm btn-circle absolute top-2.5 right-2"
+        aria-label="Pause le jeu"
+        title="Pause le jeu"
+        onClick={() => openPopup("pause")}
+      >
+        <IoMdPause />
+      </button>
+    </div>
   );
 }

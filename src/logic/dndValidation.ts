@@ -12,13 +12,20 @@ export function isDraggableStack(stack: ICard[]): boolean {
     return false;
   }
 
+  // On prend la couleur de la première carte comme référence
+  const firstCardSuit = stack[0].id.split('-')[0];
+
   for (let i = 1; i < stack.length; i++) {
     const prevCard = stack[i - 1];
     const currentCard = stack[i];
+    const currentCardSuit = currentCard.id.split('-')[0];
 
-    // Dans un stack valide, toutes les cartes doivent être face visible
-    // et les valeurs doivent être décroissantes.
-    if (!currentCard.faceUp || prevCard.value !== currentCard.value + 1) {
+    // La pile doit être face visible, en ordre décroissant, ET de la même couleur.
+    if (
+      !currentCard.faceUp ||
+      prevCard.value !== currentCard.value + 1 ||
+      currentCardSuit !== firstCardSuit
+    ) {
       return false;
     }
   }
