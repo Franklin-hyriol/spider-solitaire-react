@@ -14,7 +14,7 @@ import { createDeck } from "../helpers/cardHelpers";
  */
 export const useColumnsStore = create(
   persist<ColumnsStore>(
-    (set) => ({
+    (set, get) => ({
       level: "medium", // Niveau par défaut
       columns: [],
       foundation: [],
@@ -64,6 +64,10 @@ export const useColumnsStore = create(
         }));
 
         set({ level, columns: newColumns, foundation, stock });
+      },
+      restartGame: () => {
+        const { level, initGame } = get();
+        initGame(level);
       },
       revealLastCard: (columnId) =>
         set((state) => ({

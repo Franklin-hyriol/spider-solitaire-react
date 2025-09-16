@@ -22,6 +22,7 @@ export interface ColumnsStore {
   setColumns: (updater: IColumn[] | ((prev: IColumn[]) => IColumn[])) => void;
   updateColumn: (id: string, newColumn: Partial<IColumn>) => void;
   initGame: (level: Level) => void;
+  restartGame: () => void;
   revealLastCard: (columnId: string) => void;
   dealFromStock: () => void;
   moveToFoundation: (stack: ICard[], sourceColumnId: string, foundationId: string) => void;
@@ -74,7 +75,7 @@ export type PlayerMood = typeof PlayerMood[keyof typeof PlayerMood];
 
 
 // Type pour les popups
-export type PopupType = "new" | "pause" | "quit" | boolean;
+export type PopupType = "new" | "pause" | "quit" | "confirmRestart" | boolean;
 
 // Niveaux de difficulté
 export type Level = "easy" | "medium" | "hard";
