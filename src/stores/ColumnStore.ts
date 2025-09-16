@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { IColumn, ICard, ColumnsStore } from "../types";
+import type { IColumn, ICard, ColumnsStore, Level } from "../types";
 import { COLUMN_COUNT } from "../constants/game";
 import { shuffleArray } from "../utils/arrayUtils";
 import { createDeck } from "../helpers/cardHelpers";
@@ -15,6 +15,7 @@ import { createDeck } from "../helpers/cardHelpers";
 export const useColumnsStore = create(
   persist<ColumnsStore>(
     (set) => ({
+      level: "medium", // Niveau par défaut
       columns: [],
       foundation: [],
       stock: [],
@@ -29,8 +30,8 @@ export const useColumnsStore = create(
             col.id === id ? { ...col, ...newColumn } : col
           ),
         })),
-      initGame: () => {
-        const shuffledCards = shuffleArray(createDeck());
+      initGame: (level: Level) => {
+        const shuffledCards = shuffleArray(createDeck(level));
         const newColumns: IColumn[] = [];
         let cardIndex = 0;
 
@@ -62,7 +63,7 @@ export const useColumnsStore = create(
           cards: [],
         }));
 
-        set({ columns: newColumns, foundation, stock });
+        set({ level, columns: newColumns, foundation, stock });
       },
       revealLastCard: (columnId) =>
         set((state) => ({

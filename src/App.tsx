@@ -11,7 +11,7 @@ import { Level } from "./types";
 
 function App() {
   const { initGame, columns } = useColumnsStore();
-  const { start: startChrono, pause: pauseChrono, resume: resumeChrono } = useGameStatsStore();
+  const { start: startChrono, pause: pauseChrono, resume: resumeChrono, reset: resetStats } = useGameStatsStore();
   const { type: popupType, open: openPopup, close: closePopup } = usePopupStore();
 
   // Logique de démarrage de l'application
@@ -36,7 +36,8 @@ function App() {
   }, [popupType, pauseChrono, resumeChrono]);
 
   const handlePlay = (level: Level) => {
-    // initGame(level); // Bientôt...
+    resetStats();
+    initGame(level);
     startChrono();
     closePopup();
   };

@@ -1,26 +1,41 @@
-import type { ICard } from "../types"
+import type { ICard, Level } from "../types";
 
-const colors = ["spade", "diamond"] // pour l'instant juste noir
-const decksPerColor = 4
+// Crée un jeu de cartes pour le Spider Solitaire en fonction du niveau
+export const createDeck = (level: Level): ICard[] => {
+  let colors: string[] = [];
+  let decksPerColor = 0;
 
-// Crée un jeu de cartes pour le Spider Solitaire (distribution initiale)
-export const createDeck = (): ICard[] => {
-    const cards: ICard[] = []
+  switch (level) {
+    case "easy":
+      colors = ["spade"];
+      decksPerColor = 8;
+      break;
+    case "medium":
+      colors = ["spade", "diamond"];
+      decksPerColor = 4;
+      break;
+    case "hard":
+      colors = ["spade", "diamond", "club", "heart"];
+      decksPerColor = 2;
+      break;
+  }
 
-    for (const color of colors) {
-        for (let deck = 1; deck <= decksPerColor; deck++) {
-            for (let value = 1; value <= 13; value++) {
-                cards.push({
-                    id: `${color}-${value}-${deck}`,
-                    value,
-                    faceUp: false
-                })
-            }
-        }
+  const cards: ICard[] = [];
+
+  for (const color of colors) {
+    for (let deck = 1; deck <= decksPerColor; deck++) {
+      for (let value = 1; value <= 13; value++) {
+        cards.push({
+          id: `${color}-${value}-${deck}`,
+          value,
+          faceUp: false,
+        });
+      }
     }
+  }
 
-    return cards
-}
+  return cards;
+};
 
 
 
