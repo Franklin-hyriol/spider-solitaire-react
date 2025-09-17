@@ -1,8 +1,10 @@
 type PauseGameProps = {
   onContinue: () => void;
+  onRestart: () => void;
+  onNewGame: () => void;
 };
 
-export default function PauseGame({ onContinue }: PauseGameProps) {
+export default function PauseGame({ onContinue, onRestart, onNewGame }: PauseGameProps) {
   return (
     <div className="max-w-md w-[448px] h-fit p-8 flex flex-col items-center gap-4">
       <h2 className="w-full text-center text-3xl font-bold text-emerald-800 mb-4 pb-4 border-b-4 border-emerald-600">Jeu en Pause</h2>
@@ -14,8 +16,8 @@ export default function PauseGame({ onContinue }: PauseGameProps) {
       </div>
 
       <button onClick={onContinue} className="btn btn-dash btn-primary w-full">Reprendre</button>
-      <button className="btn btn-dash btn-secondary w-full">Recommencer</button>
-      <button className="btn btn-dash btn-tertiary w-full">Nouvelle Partie</button>
+      <button onClick={onRestart} className="btn btn-dash btn-secondary w-full">Recommencer</button>
+      <button onClick={onNewGame} className="btn btn-dash btn-tertiary w-full">Nouvelle Partie</button>
     </div>
   );
 }

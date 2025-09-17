@@ -8,7 +8,11 @@ import {
 } from "react-icons/bs";
 import { usePopupStore } from "../../stores/PopupStore";
 
-function Header() {
+type HeaderProps = {
+  onRestart: () => void;
+};
+
+function Header({ onRestart }: HeaderProps) {
   const openPopup = usePopupStore((state) => state.open);
 
   const handleMenuClick = (callback?: () => void) => {
@@ -52,7 +56,7 @@ function Header() {
                 <li>
                   <button
                     className="hover:text-primary"
-                    onClick={() => handleMenuClick()}
+                    onClick={() => handleMenuClick(onRestart)}
                   >
                     <BsArrowRepeat className="mr-2" />
                     Restarter

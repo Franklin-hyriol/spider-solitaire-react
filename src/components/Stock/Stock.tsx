@@ -12,7 +12,7 @@ function Stock() {
   if (stock.length === 0) {
     return (
       <div className="absolute bottom-5 right-8">
-        <div className="w-30 h-40 border-2 border-dashed border-gray-500 rounded-md bg-black/10" />
+        <div className="w-30 h-40" />
       </div>
     );
   }

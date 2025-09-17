@@ -14,7 +14,7 @@ import { createDeck } from "../helpers/cardHelpers";
  */
 export const useColumnsStore = create(
   persist<ColumnsStore>(
-    (set) => ({
+    (set, get) => ({
       level: "medium", // Niveau par défaut
       columns: [],
       foundation: [],
@@ -65,6 +65,10 @@ export const useColumnsStore = create(
 
         set({ level, columns: newColumns, foundation, stock });
       },
+      restartGame: () => {
+        const { level, initGame } = get();
+        initGame(level);
+      },
       revealLastCard: (columnId) =>
         set((state) => ({
           columns: state.columns.map((col) => {
@@ -81,6 +85,12 @@ export const useColumnsStore = create(
         })),
       dealFromStock: () =>
         set((state) => {
+          // Règle du Spider: On ne peut pas distribuer si une colonne est vide.
+          if (state.columns.some((column) => column.cards?.length === 0)) {
+            console.warn("Distribution bloquée : au moins une colonne est vide.");
+            return state;
+          }
+
           // Ne rien faire si la pioche contient moins de 10 cartes
           if (state.stock.length < 10) {
             return state;
@@ -122,6 +132,15 @@ export const useColumnsStore = create(
             }
             return pile;
           });
+
+          // Vérifie si la partie est gagnée
+          const allFoundationsFull = newFoundation.every(
+            (pile) => pile.cards?.length === 13
+          );
+
+          if (allFoundationsFull) {
+            return { columns: newColumns, foundation: newFoundation, isGameWon: true };
+          }
 
           return { columns: newColumns, foundation: newFoundation };
         }),
