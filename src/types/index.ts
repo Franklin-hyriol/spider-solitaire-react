@@ -19,6 +19,7 @@ export interface ColumnsStore {
   columns: IColumn[];
   foundation: IColumn[];
   stock: ICard[];
+  isGameWon?: boolean;
   setColumns: (updater: IColumn[] | ((prev: IColumn[]) => IColumn[])) => void;
   updateColumn: (id: string, newColumn: Partial<IColumn>) => void;
   initGame: (level: Level) => void;
@@ -75,7 +76,7 @@ export type PlayerMood = typeof PlayerMood[keyof typeof PlayerMood];
 
 
 // Type pour les popups
-export type PopupType = "new" | "pause" | "quit" | "confirmRestart" | boolean;
+export type PopupType = "new" | "pause" | "quit" | "confirmRestart" | "gameWon" | boolean;
 
 // Niveaux de difficulté
 export type Level = "easy" | "medium" | "hard";

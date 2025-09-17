@@ -133,6 +133,15 @@ export const useColumnsStore = create(
             return pile;
           });
 
+          // Vérifie si la partie est gagnée
+          const allFoundationsFull = newFoundation.every(
+            (pile) => pile.cards?.length === 13
+          );
+
+          if (allFoundationsFull) {
+            return { columns: newColumns, foundation: newFoundation, isGameWon: true };
+          }
+
           return { columns: newColumns, foundation: newFoundation };
         }),
     }),

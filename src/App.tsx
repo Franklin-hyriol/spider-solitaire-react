@@ -11,8 +11,10 @@ import { Level } from "./types";
 
 import ConfirmAction from "./components/ConfirmAction/ConfirmAction";
 
+import GameWon from "./components/GameWon/GameWon";
+
 function App() {
-  const { initGame, columns, restartGame } = useColumnsStore();
+  const { initGame, columns, restartGame, isGameWon } = useColumnsStore();
   const { start: startChrono, pause: pauseChrono, resume: resumeChrono, reset: resetStats } = useGameStatsStore();
   const { type: popupType, open: openPopup, close: closePopup } = usePopupStore();
 
@@ -36,6 +38,13 @@ function App() {
       resumeChrono();
     }
   }, [popupType, pauseChrono, resumeChrono]);
+
+  // Ouvre le popup de victoire quand la partie est gagnée
+  useEffect(() => {
+    if (isGameWon) {
+      openPopup("gameWon");
+    }
+  }, [isGameWon, openPopup]);
 
   const handlePlay = (level: Level) => {
     resetStats();
@@ -99,6 +108,18 @@ function App() {
           message="Êtes-vous sûr ? Votre progression sur cette partie sera perdue."
           onConfirm={executeRestart}
           onCancel={closePopup}
+        />
+      </Popup>
+
+      {/* Popup de victoire */}
+      <Popup
+        open={popupType === "gameWon"}
+        setOpen={closePopup}
+        closeOnOverlayClick={false}
+      >
+        <GameWon
+          onNewGame={() => openPopup("new")}
+          onRestart={handleRestart}
         />
       </Popup>
     </>
