@@ -4,6 +4,7 @@ import type { IColumn, ICard, ColumnsStore, Level } from "../types";
 import { COLUMN_COUNT } from "../constants/game";
 import { shuffleArray } from "../utils/arrayUtils";
 import { createDeck } from "../helpers/cardHelpers";
+import { useUndoStore } from "./UndoStore";
 
 
 
@@ -83,7 +84,8 @@ export const useColumnsStore = create(
             return col;
           }),
         })),
-      dealFromStock: () =>
+      dealFromStock: () => {
+        useUndoStore.getState().setPreviousState();
         set((state) => {
           // Règle du Spider: On ne peut pas distribuer si une colonne est vide.
           if (state.columns.some((column) => column.cards?.length === 0)) {
@@ -111,7 +113,8 @@ export const useColumnsStore = create(
           });
 
           return { stock: newStock, columns: newColumns };
-        }),
+        });
+      },
       moveToFoundation: (stack, sourceColumnId, foundationId) =>
         set((state) => {
           // Retire la pile de la colonne d'origine

@@ -11,6 +11,7 @@ import { isDraggableStack, isValidDropTarget } from "../logic/dndValidation";
 import { moveCardStack } from "../logic/dndState";
 import { checkForCompletedSet } from "../helpers/cardHelpers";
 import { useDragStore } from "../stores/DragStore"; // Import the new store
+import { useUndoStore } from "../stores/UndoStore";
 
 /**
  * Hook personnalisé pour gérer toute la logique du glisser-déposer (drag and drop).
@@ -72,6 +73,7 @@ export function useDragAndDrop() {
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
+    useUndoStore.getState().setPreviousState();
     const { active, over } = event;
 
     // draggedStack is now from the store, so we get it directly
