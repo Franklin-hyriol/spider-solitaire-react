@@ -63,7 +63,7 @@ export const useColumnsStore = create(
           cards: [],
         }));
 
-        set({ level, columns: newColumns, foundation, stock });
+        set({ level, columns: newColumns, foundation, stock, isGameWon: false });
       },
       restartGame: () => {
         const { level, initGame } = get();
