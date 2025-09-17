@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { PlayerMood, type GameStatsStore } from "../types";
+import { type GameStatsStore } from "../types";
 // import { cryptoLocalStorage } from "../helpers/cryptoLocalStorage"; // Import the custom storage
 
 export const useGameStatsStore = create(
@@ -12,7 +12,8 @@ export const useGameStatsStore = create(
             moves: 0,
             completedSets: 0,
             gameStartDate: null,
-            mood: PlayerMood.Calm,
+            undos: 0,
+            hints: 0,
 
             start: () => set({ isRunning: true }),
 
@@ -30,16 +31,17 @@ export const useGameStatsStore = create(
                     moves: 0,
                     completedSets: 0,
                     gameStartDate: null,
-                    mood: PlayerMood.Calm,
+                    undos: 0,
+                    hints: 0,
                 }),
 
             addMove: () => set((s) => ({ moves: s.moves + 1 })),
+            addUndo: () => set((s) => ({ undos: s.undos + 1 })),
+            addHint: () => set((s) => ({ hints: s.hints + 1 })),
             addMoney: (amount) => set((s) => ({ money: s.money + amount })),
             addCompletedSet: () => set((s) => ({ completedSets: s.completedSets + 1 })),
 
             getElapsed: () => get().elapsedTime,
-
-            setMood: (mood: PlayerMood) => set({ mood }),
         }),
         {
             name: "solitaire-game-stats",
@@ -50,7 +52,8 @@ export const useGameStatsStore = create(
                 moves: state.moves,
                 completedSets: state.completedSets,
                 gameStartDate: state.gameStartDate,
-                mood: state.mood,
+                undos: state.undos,
+                hints: state.hints,
             } as any), // eslint-disable-line @typescript-eslint/no-explicit-any
         }
     )
