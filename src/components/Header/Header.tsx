@@ -10,9 +10,10 @@ import { usePopupStore } from "../../stores/PopupStore";
 
 type HeaderProps = {
   onRestart: () => void;
+  onHelp: () => void;
 };
 
-function Header({ onRestart }: HeaderProps) {
+function Header({ onRestart, onHelp }: HeaderProps) {
   const openPopup = usePopupStore((state) => state.open);
 
   const handleMenuClick = (callback?: () => void) => {
@@ -103,8 +104,8 @@ function Header({ onRestart }: HeaderProps) {
             <li className="cursor-pointer hover:text-primary">
               <span className="underline">D</span>istribuer
             </li>
-            <li className="cursor-pointer hover:text-primary">
-              <span className="underline">?</span>
+            <li className="cursor-pointer hover:text-primary" onClick={() => handleMenuClick(onHelp)}>
+              <span className="underline">?</span> 
             </li>
           </ul>
 

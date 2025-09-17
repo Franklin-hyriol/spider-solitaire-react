@@ -12,6 +12,7 @@ import { Level } from "./types";
 import ConfirmAction from "./components/ConfirmAction/ConfirmAction";
 
 import GameWon from "./components/GameWon/GameWon";
+import HelpPopup from "./components/HelpPopup/HelpPopup";
 
 function App() {
   const { initGame, columns, restartGame, isGameWon } = useColumnsStore();
@@ -53,11 +54,6 @@ function App() {
     closePopup();
   };
 
-  // Ouvre le popup de confirmation
-  const handleRestart = () => {
-    openPopup("confirmRestart");
-  };
-
   // Exécute le redémarrage
   const executeRestart = () => {
     resetStats();
@@ -66,13 +62,9 @@ function App() {
     closePopup(); // Ferme le popup de confirmation
   };
 
-  const handleContinue = () => {
-    closePopup();
-  };
-
   return (
     <>
-      <Header onRestart={handleRestart} />
+      <Header onRestart={() => openPopup("confirmRestart")} onHelp={() => openPopup("help")} />
       <GameSurface />
 
       {/* Popup pour une nouvelle partie */}
@@ -91,8 +83,8 @@ function App() {
         closeOnOverlayClick={true}
       >
         <PauseGame
-          onContinue={handleContinue}
-          onRestart={handleRestart}
+          onContinue={closePopup}
+          onRestart={() => openPopup("confirmRestart")}
           onNewGame={() => openPopup("new")}
         />
       </Popup>
@@ -119,8 +111,17 @@ function App() {
       >
         <GameWon
           onNewGame={() => openPopup("new")}
-          onRestart={handleRestart}
+          onRestart={() => openPopup("confirmRestart")}
         />
+      </Popup>
+
+      {/* Popup d'aide */}
+      <Popup
+        open={popupType === "help"}
+        setOpen={closePopup}
+        closeOnOverlayClick={true}
+      >
+        <HelpPopup onClose={closePopup} />
       </Popup>
     </>
   );
