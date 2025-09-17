@@ -6,9 +6,7 @@ import { IoMdPause } from "react-icons/io";
 
 import { usePopupStore } from "../../stores/PopupStore";
 
-type TimerStatProps = {};
-
-export default function TimerStat({}: TimerStatProps) {
+export default function TimerStat() {
   const openPopup = usePopupStore((state) => state.open);
 
   // Récupération des états et actions depuis le store

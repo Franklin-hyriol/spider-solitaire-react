@@ -1,5 +1,5 @@
 import Header from "./components/Header/Header";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useColumnsStore } from "./stores/ColumnStore";
 import { useGameStatsStore } from "./stores/GameStatsStore";
 import { GameSurface } from "./components/GameSurface/GameSurface";
@@ -16,20 +16,20 @@ import HelpPopup from "./components/HelpPopup/HelpPopup";
 
 function App() {
   const { initGame, columns, restartGame, isGameWon } = useColumnsStore();
+  const initialColumnsLength = useRef(columns.length);
   const { start: startChrono, pause: pauseChrono, resume: resumeChrono, reset: resetStats } = useGameStatsStore();
   const { type: popupType, open: openPopup, close: closePopup } = usePopupStore();
 
   // Logique de démarrage de l'application
   useEffect(() => {
     // Si des colonnes existent, une partie est en cours (chargée depuis le localStorage)
-    if (columns.length > 0) {
+    if (initialColumnsLength.current > 0) {
       openPopup("pause");
     } else {
       // Aucune partie en cours, on lance une nouvelle partie
       openPopup("new");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Le tableau vide assure que cela ne s'exécute qu'une seule fois au montage
+  }, [openPopup]);
 
   // Gère la pause du chronomètre en fonction de l'état des popups
   useEffect(() => {

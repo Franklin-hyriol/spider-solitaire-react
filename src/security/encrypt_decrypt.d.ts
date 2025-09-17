@@ -6,5 +6,5 @@ interface WasmModule {
   _encrypt_decrypt(ptr: number, length: number): void;
 }
 
-declare function createEncryptDecryptModule(moduleArgs?: any): Promise<WasmModule>;
+declare function createEncryptDecryptModule(moduleArgs?: object): Promise<WasmModule>;
 export default createEncryptDecryptModule;
