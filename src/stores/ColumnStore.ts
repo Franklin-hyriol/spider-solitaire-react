@@ -85,6 +85,12 @@ export const useColumnsStore = create(
         })),
       dealFromStock: () =>
         set((state) => {
+          // Règle du Spider: On ne peut pas distribuer si une colonne est vide.
+          if (state.columns.some((column) => column.cards?.length === 0)) {
+            console.warn("Distribution bloquée : au moins une colonne est vide.");
+            return state;
+          }
+
           // Ne rien faire si la pioche contient moins de 10 cartes
           if (state.stock.length < 10) {
             return state;
