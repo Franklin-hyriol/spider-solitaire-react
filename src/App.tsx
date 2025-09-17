@@ -1,5 +1,5 @@
 import Header from "./components/Header/Header";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useColumnsStore } from "./stores/ColumnStore";
 import { useGameStatsStore } from "./stores/GameStatsStore";
 import { GameSurface } from "./components/GameSurface/GameSurface";
@@ -12,23 +12,24 @@ import { Level } from "./types";
 import ConfirmAction from "./components/ConfirmAction/ConfirmAction";
 
 import GameWon from "./components/GameWon/GameWon";
+import HelpPopup from "./components/HelpPopup/HelpPopup";
 
 function App() {
   const { initGame, columns, restartGame, isGameWon } = useColumnsStore();
+  const initialColumnsLength = useRef(columns.length);
   const { start: startChrono, pause: pauseChrono, resume: resumeChrono, reset: resetStats } = useGameStatsStore();
   const { type: popupType, open: openPopup, close: closePopup } = usePopupStore();
 
   // Logique de démarrage de l'application
   useEffect(() => {
     // Si des colonnes existent, une partie est en cours (chargée depuis le localStorage)
-    if (columns.length > 0) {
+    if (initialColumnsLength.current > 0) {
       openPopup("pause");
     } else {
       // Aucune partie en cours, on lance une nouvelle partie
       openPopup("new");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Le tableau vide assure que cela ne s'exécute qu'une seule fois au montage
+  }, [openPopup]);
 
   // Gère la pause du chronomètre en fonction de l'état des popups
   useEffect(() => {
@@ -53,11 +54,6 @@ function App() {
     closePopup();
   };
 
-  // Ouvre le popup de confirmation
-  const handleRestart = () => {
-    openPopup("confirmRestart");
-  };
-
   // Exécute le redémarrage
   const executeRestart = () => {
     resetStats();
@@ -66,13 +62,9 @@ function App() {
     closePopup(); // Ferme le popup de confirmation
   };
 
-  const handleContinue = () => {
-    closePopup();
-  };
-
   return (
     <>
-      <Header onRestart={handleRestart} />
+      <Header onRestart={() => openPopup("confirmRestart")} onHelp={() => openPopup("help")} />
       <GameSurface />
 
       {/* Popup pour une nouvelle partie */}
@@ -91,8 +83,8 @@ function App() {
         closeOnOverlayClick={true}
       >
         <PauseGame
-          onContinue={handleContinue}
-          onRestart={handleRestart}
+          onContinue={closePopup}
+          onRestart={() => openPopup("confirmRestart")}
           onNewGame={() => openPopup("new")}
         />
       </Popup>
@@ -119,8 +111,17 @@ function App() {
       >
         <GameWon
           onNewGame={() => openPopup("new")}
-          onRestart={handleRestart}
+          onRestart={() => openPopup("confirmRestart")}
         />
+      </Popup>
+
+      {/* Popup d'aide */}
+      <Popup
+        open={popupType === "help"}
+        setOpen={closePopup}
+        closeOnOverlayClick={true}
+      >
+        <HelpPopup onClose={closePopup} />
       </Popup>
     </>
   );

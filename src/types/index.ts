@@ -46,7 +46,8 @@ export interface GameStatsStore {
   moves: number;
   completedSets: number;
   gameStartDate: number | null; // timestamp de début de la partie pour lister les saves
-  mood: PlayerMood; // <-- État d’esprit du joueur
+  undos: number;
+  hints: number;
 
   // actions pour gérer le jeu
   start: () => void;
@@ -55,28 +56,18 @@ export interface GameStatsStore {
   reset: () => void;
   incrementTime: () => void;
   addMove: () => void;
+  addUndo: () => void;
+  addHint: () => void;
   addMoney: (amount: number) => void;
   addCompletedSet: () => void;
-  setMood: (mood: PlayerMood) => void;
 
   // getter pour obtenir le temps écoulé
   getElapsed: () => number;
 }
 
-// Énumération des états d'esprit possibles
-export const PlayerMood = {
-  Calm: "🙂 Calme",
-  Focused: "🧐 Concentré",
-  Stressed: "😬 Stressé",
-  Excited: "🤩 Excité",
-  Tired: "😴 Fatigué",
-} as const;
-
-export type PlayerMood = typeof PlayerMood[keyof typeof PlayerMood];
-
 
 // Type pour les popups
-export type PopupType = "new" | "pause" | "quit" | "confirmRestart" | "gameWon" | boolean;
+export type PopupType = "new" | "pause" | "quit" | "confirmRestart" | "gameWon" | "help" | boolean;
 
 // Niveaux de difficulté
 export type Level = "easy" | "medium" | "hard";

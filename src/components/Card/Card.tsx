@@ -4,10 +4,7 @@ import { getCardClass } from "../../helpers/cardHelpers";
 import React from "react";
 import { useDragStore } from "../../stores/DragStore";
 
-// Représente une seule carte dans une colonne.
-interface ICardComponentProps extends ICard {}
-
-function CardComponent({ id, value, faceUp }: ICardComponentProps) {
+function CardComponent({ id, value, faceUp }: ICard) {
   // Souscription optimisée au store de Drag
   const isBeingDragged = useDragStore((state) => state.draggedCardIds.has(id));
   const isValidDrag = useDragStore((state) => state.isValidDrag);

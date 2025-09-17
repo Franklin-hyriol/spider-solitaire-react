@@ -2,8 +2,9 @@ import { FaSlidersH } from "react-icons/fa";
 import TimerStat from "../TimerStat/TimerStat";
 import MoneyStat from "../MoneyStat/MoneyStat";
 import MovesStat from "../MovesStat/MovesStat";
-import MoodStat from "../MoodStat/MoodStat";
 import CompletedSetsStat from "../CompletedSetsStat/CompletedSetsStat";
+import UndoStat from "../UndoStat/UndoStat";
+import HintStat from "../HintStat/HintStat";
 
 import { useColumnsStore } from "../../stores/ColumnStore";
 import { Level } from "../../types";
@@ -32,7 +33,8 @@ export default function Dashboard() {
           <MovesStat />
           <TimerStat />
           <CompletedSetsStat />
-          <MoodStat />
+          <UndoStat />
+          <HintStat />
         </div>
       </div>
     </>

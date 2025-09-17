@@ -9,7 +9,7 @@ interface WasmModule {
 }
 
 // Forcer le type de la fonction WASM
-const createEncryptDecryptModule = wasmModule as unknown as (moduleArgs?: any) => Promise<WasmModule>;
+const createEncryptDecryptModule = wasmModule as unknown as (moduleArgs?: object) => Promise<WasmModule>;
 
 let encryptDecryptModule: WasmModule | null = null;
 
@@ -26,7 +26,7 @@ export const wasmReadyPromise = createEncryptDecryptModule().then((module) => {
 
 // Custom storage object for Zustand Persist middleware
 export const cryptoLocalStorage = {
-  setItem: (name: string, value: any) => {
+  setItem: (name: string, value: { state: { money: number | string } }) => {
     const stateToStore = { ...value }; // Clone the state object (value is {state: ..., version: ...})
 
     if (encryptDecryptModule) {
@@ -54,7 +54,7 @@ export const cryptoLocalStorage = {
     const storedValue = localStorage.getItem(name);
     if (!storedValue) return null;
 
-    let parsedState;
+    let parsedState: { state: { money: number | string } };
     try {
       parsedState = JSON.parse(storedValue);
     } catch (e) {

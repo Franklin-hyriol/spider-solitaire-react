@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 
 type PopupProps = {
   children: React.ReactNode;
@@ -16,7 +16,7 @@ const Popup: React.FC<PopupProps> = ({
   className = "",
 }) => {
   // Fermer la popup
-  const close = () => setOpen(false);
+  const close = useCallback(() => setOpen(false), [setOpen]);
 
   // Bloque le scroll du body quand la popup est visible
   useEffect(() => {
@@ -35,7 +35,7 @@ const Popup: React.FC<PopupProps> = ({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [open, close]);
 
   if (!open) return null;
 

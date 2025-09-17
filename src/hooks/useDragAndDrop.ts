@@ -11,6 +11,7 @@ import { isDraggableStack, isValidDropTarget } from "../logic/dndValidation";
 import { moveCardStack } from "../logic/dndState";
 import { checkForCompletedSet } from "../helpers/cardHelpers";
 import { useDragStore } from "../stores/DragStore"; // Import the new store
+import { useUndoStore } from "../stores/UndoStore";
 
 /**
  * Hook personnalisé pour gérer toute la logique du glisser-déposer (drag and drop).
@@ -18,9 +19,19 @@ import { useDragStore } from "../stores/DragStore"; // Import the new store
 export function useDragAndDrop() {
   const columns = useColumnsStore((state) => state.columns);
   const setColumns = useColumnsStore((state) => state.setColumns);
+  const revealLastCard = useColumnsStore((state) => state.revealLastCard);
+  const moveToFoundation = useColumnsStore((state) => state.moveToFoundation);
+  const foundation = useColumnsStore((state) => state.foundation);
 
-  // Use the new drag store for drag state
-  const { setDraggedStack, setIsValidDrag } = useDragStore.getState();
+  const addMove = useGameStatsStore((state) => state.addMove);
+  const addMoney = useGameStatsStore((state) => state.addMoney);
+  const addCompletedSet = useGameStatsStore((state) => state.addCompletedSet);
+
+  const setDraggedStack = useDragStore((state) => state.setDraggedStack);
+  const setIsValidDrag = useDragStore((state) => state.setIsValidDrag);
+  const draggedStack = useDragStore((state) => state.draggedStack);
+
+  const setPreviousState = useUndoStore((state) => state.setPreviousState);
 
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
@@ -67,17 +78,14 @@ export function useDragAndDrop() {
 
   const handleDragOver = (event: DragOverEvent) => {
     const { over } = event;
-    const draggedStack = useDragStore.getState().draggedStack;
     if (!over || !draggedStack) return;
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
+    setPreviousState();
     const { active, over } = event;
 
-    // draggedStack is now from the store, so we get it directly
-    const currentDraggedStack = useDragStore.getState().draggedStack;
-
-    if (!over || !currentDraggedStack) {
+    if (!over || !draggedStack) {
       cleanupDragState();
       return;
     }
@@ -96,21 +104,18 @@ export function useDragAndDrop() {
     }
 
     const overColumn = columns.find((c) => c.id === overColId);
-    if (isValidDropTarget(currentDraggedStack, overColumn?.cards)) {
-      const { addMove, addMoney, addCompletedSet } = useGameStatsStore.getState();
+    if (isValidDropTarget(draggedStack, overColumn?.cards)) {
       addMove();
       addMoney(-10);
 
       const newColumnsState = moveCardStack(
         columns,
-        currentDraggedStack,
+        draggedStack,
         activeColId,
         overColId
       );
       setColumns(newColumnsState);
 
-      const { revealLastCard, moveToFoundation, foundation } =
-        useColumnsStore.getState();
       revealLastCard(String(activeColId));
 
       const updatedOverColumn = newColumnsState.find(
