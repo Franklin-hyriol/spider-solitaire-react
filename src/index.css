@@ -4,9 +4,8 @@
   themes: emerald --default, dark, dracula, sfantasy, valentine;
 }
 
-@utility custom-bg {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.15) 1px, transparent 1px);
-  background-size: 15px 15px;
+@theme {
+  --color-square: oklch(from var(--color-base-content) l c h / 0.1);
 }
 
 
