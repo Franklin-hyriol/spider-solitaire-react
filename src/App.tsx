@@ -111,7 +111,7 @@ function App() {
       >
         <GameWon
           onNewGame={() => openPopup("new")}
-          onRestart={() => openPopup("confirmRestart")}
+          onRestart={() => executeRestart()}
         />
       </Popup>
 
