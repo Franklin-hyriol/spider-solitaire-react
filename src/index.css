@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes: emerald --default, dark, dracula, sfantasy, valentine;
+  themes: emerald --default, dark, dracula, fantasy, valentine;
 }
 
 @theme {

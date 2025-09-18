@@ -34,7 +34,7 @@ function Header({ onRestart, onHelp }: HeaderProps) {
         <div className="flex justify-between px-4 py-1.5 text-sm items-center w-full">
           <ul className="flex gap-4">
             <li className="dropdown dropdown-start">
-              <button className="cursor-pointer hover:text-secondary">
+              <button className="cursor-pointer hover:text-primary">
                 <span tabIndex={0} role="button" className="underline">
                   J
                 </span>
@@ -43,11 +43,11 @@ function Header({ onRestart, onHelp }: HeaderProps) {
 
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                className="menu menu-md dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
               >
                 <li>
                   <button
-                    className="hover:text-secondary"
+                    className="hover:text-primary"
                     onClick={() => handleMenuClick(() => openPopup("new"))}
                   >
                     <BsNewspaper className="mr-2" />
@@ -56,7 +56,7 @@ function Header({ onRestart, onHelp }: HeaderProps) {
                 </li>
                 <li>
                   <button
-                    className="hover:text-secondary"
+                    className="hover:text-primary"
                     onClick={() => handleMenuClick(onRestart)}
                   >
                     <BsArrowRepeat className="mr-2" />
@@ -65,7 +65,7 @@ function Header({ onRestart, onHelp }: HeaderProps) {
                 </li>
                 <li>
                   <button
-                    className="hover:text-secondary"
+                    className="hover:text-primary"
                     onClick={() => handleMenuClick()}
                   >
                     <BsDownload className="mr-2" />
@@ -74,7 +74,7 @@ function Header({ onRestart, onHelp }: HeaderProps) {
                 </li>
                 <li>
                   <button
-                    className="hover:text-secondary"
+                    className="hover:text-primary"
                     onClick={() => handleMenuClick()}
                   >
                     <BsClockHistory className="mr-2" />
@@ -83,7 +83,7 @@ function Header({ onRestart, onHelp }: HeaderProps) {
                 </li>
                 <li>
                   <button
-                    className="hover:text-secondary"
+                    className="hover:text-primary"
                     onClick={() => handleMenuClick()}
                   >
                     <BsGraphUp className="mr-2" />
@@ -92,7 +92,7 @@ function Header({ onRestart, onHelp }: HeaderProps) {
                 </li>
                 <li>
                   <button
-                    className="hover:text-secondary"
+                    className="hover:text-primary"
                     onClick={() => handleMenuClick()}
                   >
                     <BsGear className="mr-2" />
@@ -101,10 +101,10 @@ function Header({ onRestart, onHelp }: HeaderProps) {
                 </li>
               </ul>
             </li>
-            <li className="cursor-pointer hover:text-secondary">
+            <li className="cursor-pointer hover:text-primary">
               <span className="underline">D</span>istribuer
             </li>
-            <li className="cursor-pointer hover:text-secondary" onClick={() => handleMenuClick(onHelp)}>
+            <li className="cursor-pointer hover:text-primary" onClick={() => handleMenuClick(onHelp)}>
               <span className="underline">A</span>ide
             </li>
           </ul>
