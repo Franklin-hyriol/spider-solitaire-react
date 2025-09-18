@@ -1,5 +1,5 @@
 import Stat from "../Stat/Stat";
-import { FaTrophy } from "react-icons/fa";
+import { FaRegMoneyBillAlt } from "react-icons/fa";
 import { useGameStatsStore } from "../../stores/GameStatsStore";
 
 export default function MoneyStat() {
@@ -8,6 +8,6 @@ export default function MoneyStat() {
   const formattedMoney = `${money.toString().padStart(6, "0")}$`;
 
   return (
-    <Stat icon={FaTrophy} label="Argent actuel" value={formattedMoney} />
+    <Stat icon={FaRegMoneyBillAlt} label="Argent actuel" value={formattedMoney} />
   );
 }

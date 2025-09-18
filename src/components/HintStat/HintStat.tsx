@@ -1,5 +1,6 @@
 import Stat from "../Stat/Stat";
-import { HiOutlineQuestionMarkCircle, HiOutlineLightBulb } from "react-icons/hi2";
+import { HiOutlineQuestionMarkCircle } from "react-icons/hi2";
+import { FaRegLightbulb } from "react-icons/fa6";
 import { useGameStatsStore } from "../../stores/GameStatsStore";
 
 export default function HintStat() {
@@ -16,7 +17,7 @@ export default function HintStat() {
         title="Demander un indice"
         onClick={() => {}}
       >
-        <HiOutlineLightBulb />
+        <FaRegLightbulb />
       </button>
     </div>
   );
