@@ -45,7 +45,7 @@ export function GameSurface() {
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      <main className="bg-green-300 h-[calc(100vh-32px)] w-full relative">
+      <main className="custom-bg h-[calc(100vh-32px)] w-full relative">
         <div className="py-4 px-8 h-full">
           <Board />
         </div>

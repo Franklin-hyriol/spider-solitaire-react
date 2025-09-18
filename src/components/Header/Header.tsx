@@ -30,7 +30,7 @@ function Header({ onRestart, onHelp }: HeaderProps) {
 
   return (
     <>
-      <header className="bg-base-100 shadow-sm">
+      <header className="bg-base-100 shadow-lg">
         <div className="flex justify-between px-4 py-1.5 text-sm items-center w-full">
           <ul className="flex gap-4">
             <li className="dropdown dropdown-start">
