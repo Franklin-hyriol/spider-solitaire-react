@@ -1,11 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { IColumn, ICard, ColumnsStore } from "../types";
+import type { IColumn, ICard, ColumnsStore, Level } from "../types";
 import { COLUMN_COUNT } from "../constants/game";
 import { shuffleArray } from "../utils/arrayUtils";
 import { createDeck } from "../helpers/cardHelpers";
-
-
+import { useUndoStore } from "./UndoStore";
+import { useHintStore } from "./HintStore";
+import { hasPossibleMoves } from "../logic/gameLogic";
 
 /**
  * Store Zustand pour gérer l'état global du jeu (colonnes et cartes).
@@ -14,23 +15,43 @@ import { createDeck } from "../helpers/cardHelpers";
  */
 export const useColumnsStore = create(
   persist<ColumnsStore>(
-    (set) => ({
+    (set, get) => ({
+      level: "medium", // Niveau par défaut
       columns: [],
       foundation: [],
       stock: [],
-      setColumns: (updater) =>
-        set((state) => ({
-          columns:
-            typeof updater === "function" ? updater(state.columns) : updater,
-        })),
+      isGameWon: false,
+      isGameOver: false,
+
+      checkGameOver: () => {
+        const { stock, columns } = get();
+        // La partie ne peut pas être terminée s'il reste des cartes dans la pioche
+        if (stock.length > 0) {
+          return;
+        }
+
+        // S'il n'y a plus de mouvement possible, c'est game over
+        if (get().stock.length === 0 && !hasPossibleMoves(columns, get().stock)) {
+          set({ isGameOver: true });
+        }
+      },
+
+      setColumns: (updater) => {
+        const newColumns =
+          typeof updater === "function" ? updater(get().columns) : updater;
+        set({ columns: newColumns });
+        get().checkGameOver(); // Vérifie le game over après chaque modification des colonnes
+      },
+
       updateColumn: (id, newColumn) =>
         set((state) => ({
           columns: state.columns.map((col) =>
             col.id === id ? { ...col, ...newColumn } : col
           ),
         })),
-      initGame: () => {
-        const shuffledCards = shuffleArray(createDeck());
+
+      initGame: (level: Level) => {
+        const shuffledCards = shuffleArray(createDeck(level));
         const newColumns: IColumn[] = [];
         let cardIndex = 0;
 
@@ -62,8 +83,14 @@ export const useColumnsStore = create(
           cards: [],
         }));
 
-        set({ columns: newColumns, foundation, stock });
+        set({ level, columns: newColumns, foundation, stock, isGameWon: false, isGameOver: false });
       },
+
+      restartGame: () => {
+        const { level, initGame } = get();
+        initGame(level);
+      },
+
       revealLastCard: (columnId) =>
         set((state) => ({
           columns: state.columns.map((col) => {
@@ -78,10 +105,19 @@ export const useColumnsStore = create(
             return col;
           }),
         })),
-      dealFromStock: () =>
+
+      dealFromStock: () => {
+        useHintStore.getState().clearAllHints();
+        useUndoStore.getState().setPreviousState();
         set((state) => {
-          // Ne rien faire si la pioche contient moins de 10 cartes
-          if (state.stock.length < 10) {
+          // Règle du Spider: On ne peut pas distribuer si une colonne est vide.
+          if (state.columns.some((column) => column.cards?.length === 0)) {
+            console.warn("Distribution bloquée : au moins une colonne est vide.");
+            return state;
+          }
+
+          // Ne rien faire si la pioche est vide
+          if (state.stock.length === 0) {
             return state;
           }
 
@@ -100,7 +136,10 @@ export const useColumnsStore = create(
           });
 
           return { stock: newStock, columns: newColumns };
-        }),
+        });
+        get().checkGameOver(); // Vérifie le game over après la distribution
+      },
+
       moveToFoundation: (stack, sourceColumnId, foundationId) =>
         set((state) => {
           // Retire la pile de la colonne d'origine
@@ -122,6 +161,17 @@ export const useColumnsStore = create(
             return pile;
           });
 
+          // Vérifie si la partie est gagnée
+          const allFoundationsFull = newFoundation.every(
+            (pile) => pile.cards?.length === 13
+          );
+
+          if (allFoundationsFull) {
+            useHintStore.getState().clearAllHints(); // Invalider le cache d'indices
+            return { columns: newColumns, foundation: newFoundation, isGameWon: true };
+          }
+
+          useHintStore.getState().clearAllHints(); // Invalider le cache d'indices
           return { columns: newColumns, foundation: newFoundation };
         }),
     }),

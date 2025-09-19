@@ -7,36 +7,45 @@ import {
 import { useState, useCallback } from "react";
 import { useGameStatsStore } from "../stores/GameStatsStore";
 import { useColumnsStore } from "../stores/ColumnStore";
-import type { ICard } from "../types";
 import { isDraggableStack, isValidDropTarget } from "../logic/dndValidation";
 import { moveCardStack } from "../logic/dndState";
 import { checkForCompletedSet } from "../helpers/cardHelpers";
+import { useHintStore } from "../stores/HintStore";
+
+
+import { useDragStore } from "../stores/DragStore"; // Import the new store
+import { useUndoStore } from "../stores/UndoStore";
 
 /**
  * Hook personnalisé pour gérer toute la logique du glisser-déposer (drag and drop).
- * Il utilise le store Zustand (`useColumnsStore`) pour interagir avec l'état global des colonnes et des cartes.
  */
 export function useDragAndDrop() {
   const columns = useColumnsStore((state) => state.columns);
   const setColumns = useColumnsStore((state) => state.setColumns);
+  const revealLastCard = useColumnsStore((state) => state.revealLastCard);
+  const moveToFoundation = useColumnsStore((state) => state.moveToFoundation);
+  const foundation = useColumnsStore((state) => state.foundation);
 
-  // --- États locaux pour le suivi de l'opération de glisser-déposer ---
+  const addMove = useGameStatsStore((state) => state.addMove);
+  const addMoney = useGameStatsStore((state) => state.addMoney);
+  const addCompletedSet = useGameStatsStore((state) => state.addCompletedSet);
+
+  const setDraggedStack = useDragStore((state) => state.setDraggedStack);
+  const setIsValidDrag = useDragStore((state) => state.setIsValidDrag);
+  const draggedStack = useDragStore((state) => state.draggedStack);
+
+  const setPreviousState = useUndoStore((state) => state.setPreviousState);
+
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
-  const [draggedStack, setDraggedStack] = useState<ICard[] | null>(null);
 
-  /**
-   * Réinitialise l'état du glisser-déposer.
-   */
   const cleanupDragState = useCallback(() => {
     setTimeout(() => {
       setActiveId(null);
       setDraggedStack(null);
-    }, 250); // Un délai pour permettre aux animations de se terminer
-  }, []);
+      setIsValidDrag(false);
+    }, 250);
+  }, [setDraggedStack, setIsValidDrag]);
 
-  /**
-   * Trouve l'ID de la colonne à laquelle appartient un élément (carte ou colonne).
-   */
   const findColumnId = useCallback(
     (itemId: UniqueIdentifier) => {
       if (columns.some((c) => c.id === itemId)) {
@@ -47,15 +56,6 @@ export function useDragAndDrop() {
     [columns]
   );
 
-  // --- Fonctions d'accès pour les composants externes ---
-  const getActiveCard = (): ICard | undefined => draggedStack?.[0];
-  const getDraggedStack = () => draggedStack;
-
-  // --- Gestionnaires d'événements Dnd-Kit ---
-
-  /**
-   * Déclenché au début d'un glissement.
-   */
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     const activeColId = findColumnId(active.id);
@@ -72,21 +72,18 @@ export function useDragAndDrop() {
     if (isDraggableStack(potentialStack)) {
       setActiveId(active.id);
       setDraggedStack(potentialStack);
+      setIsValidDrag(true); // A drag is starting
+    } else {
+      setDraggedStack(null);
+      setIsValidDrag(false);
     }
   };
 
-  /**
-   * Déclenché lorsqu'un élément est glissé au-dessus d'une zone de dépôt.
-   */
   const handleDragOver = (event: DragOverEvent) => {
     const { over } = event;
     if (!over || !draggedStack) return;
-    // La logique de prévisualisation est gérée par dnd-kit
   };
 
-  /**
-   * Déclenché à la fin d'un glissement (lorsque l'élément est déposé).
-   */
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
@@ -103,19 +100,14 @@ export function useDragAndDrop() {
       return;
     }
 
-    // Gérer le dépôt sur une pile de fondation (logique manuelle, peut être conservée ou supprimée)
     if (String(overColId).startsWith("f")) {
-      // Pour l'instant, on ne gère pas le dépôt manuel sur la fondation
-      // car le jeu Spider déplace automatiquement les piles complètes.
-      console.log("Le dépôt manuel sur la fondation n'est pas implémenté.");
       cleanupDragState();
       return;
     }
 
-    // Logique pour le dépôt sur une colonne de jeu
     const overColumn = columns.find((c) => c.id === overColId);
     if (isValidDropTarget(draggedStack, overColumn?.cards)) {
-      const { addMove, addMoney, addCompletedSet } = useGameStatsStore.getState();
+      setPreviousState(); // Save state only on a valid move
       addMove();
       addMoney(-10);
 
@@ -126,12 +118,10 @@ export function useDragAndDrop() {
         overColId
       );
       setColumns(newColumnsState);
+      useHintStore.getState().clearAllHints(); // Invalider le cache d'indices
 
-      const { revealLastCard, moveToFoundation, foundation } =
-        useColumnsStore.getState();
       revealLastCard(String(activeColId));
 
-      // --- Vérification de la suite complète ---
       const updatedOverColumn = newColumnsState.find(
         (c) => c.id === overColId
       );
@@ -140,11 +130,10 @@ export function useDragAndDrop() {
         if (completedSet) {
           const emptyFoundation = foundation.find((f) => !f.cards || f.cards.length === 0);
           if (emptyFoundation) {
-            console.log("Suite complète détectée ! Déplacement vers la fondation.");
             moveToFoundation(completedSet, String(overColId), emptyFoundation.id);
             addCompletedSet();
-            addMoney(1000); // Bonus pour avoir complété une suite
-            revealLastCard(String(overColId)); // Révéler la carte sous la suite
+            addMoney(1000);
+            revealLastCard(String(overColId));
           }
         }
       }
@@ -153,18 +142,13 @@ export function useDragAndDrop() {
     cleanupDragState();
   };
 
-  /**
-   * Déclenché si le glissement est annulé.
-   */
   const handleDragCancel = () => {
     cleanupDragState();
   };
 
+  // The hook no longer needs to return drag state, only the handlers and activeId
   return {
     activeId,
-    getActiveCard,
-    getDraggedStack,
-    isValidDrag: !!draggedStack, // Dérivé de l'état de draggedStack
     handleDragStart,
     handleDragOver,
     handleDragEnd,

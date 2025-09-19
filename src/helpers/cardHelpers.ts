@@ -1,30 +1,41 @@
-import type { ICard } from "../types"
+import type { ICard, Level } from "../types";
 
-const colors = ["spade"] // pour l'instant juste noir
-const decksPerColor = 8   // 4 jeux pour un total de 52 cartes
+// Crée un jeu de cartes pour le Spider Solitaire en fonction du niveau
+export const createDeck = (level: Level): ICard[] => {
+  let colors: string[] = [];
+  let decksPerColor = 0;
 
-// Crée un jeu de cartes pour le Spider Solitaire (distribution initiale)
-export const createDeck = (): ICard[] => {
-    const cards: ICard[] = []
+  switch (level) {
+    case "easy":
+      colors = ["spade"];
+      decksPerColor = 8;
+      break;
+    case "medium":
+      colors = ["spade", "diamond"];
+      decksPerColor = 4;
+      break;
+    case "hard":
+      colors = ["spade", "diamond", "club", "heart"];
+      decksPerColor = 2;
+      break;
+  }
 
-    for (const color of colors) {
-        for (let deck = 1; deck <= decksPerColor; deck++) {
-            for (let value = 1; value <= 13; value++) {
-                cards.push({
-                    id: `${color}-${value}-${deck}`,
-                    value,
-                    faceUp: false
-                })
-            }
-        }
+  const cards: ICard[] = [];
+
+  for (const color of colors) {
+    for (let deck = 1; deck <= decksPerColor; deck++) {
+      for (let value = 1; value <= 13; value++) {
+        cards.push({
+          id: `${color}-${value}-${deck}`,
+          value,
+          faceUp: false,
+        });
+      }
     }
+  }
 
-    // Ajoute 2 cartes supplémentaires pour atteindre 54 cartes pour la distribution
-    cards.push({ id: "spade-1-5", value: 1, faceUp: false });
-    cards.push({ id: "spade-1-6", value: 1, faceUp: false });
-
-    return cards
-}
+  return cards;
+};
 
 
 
@@ -73,9 +84,15 @@ export const checkForCompletedSet = (cards: ICard[]): ICard[] | null => {
     return null;
   }
 
-  // Vérifier la séquence décroissante du Roi (13) à l'As (1)
+  // On prend la couleur du Roi comme référence
+  const targetSuit = lastThirteen[0].id.split('-')[0];
+
+  // On vérifie la séquence décroissante ET la couleur
   for (let i = 0; i < 13; i++) {
-    if (lastThirteen[i].value !== 13 - i) {
+    const card = lastThirteen[i];
+    const cardSuit = card.id.split('-')[0];
+
+    if (card.value !== 13 - i || cardSuit !== targetSuit) {
       return null;
     }
   }
