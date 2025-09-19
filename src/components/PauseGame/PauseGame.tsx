@@ -6,7 +6,7 @@ type PauseGameProps = {
 
 export default function PauseGame({ onContinue, onRestart, onNewGame }: PauseGameProps) {
   return (
-    <div className="max-w-md w-[448px] h-fit p-8 flex flex-col items-center gap-4">
+    <div className="max-w-md w-[var(--apx-448)] h-fit p-8 flex flex-col items-center gap-4">
       <h2 className="w-full text-center text-3xl font-bold text-emerald-800 mb-4 pb-4 border-b-4 border-emerald-600">Jeu en Pause</h2>
 
       <div className="flex gap-1 mb-6">
