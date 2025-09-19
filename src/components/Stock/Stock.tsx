@@ -1,4 +1,5 @@
 import { useColumnsStore } from "../../stores/ColumnStore";
+import { useHintStore } from "../../stores/HintStore";
 
 /**
  * Affiche la pioche (stock) et gère le clic pour distribuer de nouvelles cartes.
@@ -7,6 +8,13 @@ import { useColumnsStore } from "../../stores/ColumnStore";
 function Stock() {
   const stock = useColumnsStore((state) => state.stock);
   const dealFromStock = useColumnsStore((state) => state.dealFromStock);
+  const hintToShow = useHintStore((state) => state.hintToShow);
+  const hintPhase = useHintStore((state) => state.hintPhase);
+
+  let hintClass = "";
+  if (hintToShow?.type === "stock" && hintPhase !== "idle") {
+    hintClass = "animate-pulse-green";
+  }
 
   // Cas 1: La pioche est vide, on affiche un emplacement grisé
   if (stock.length === 0) {
@@ -21,7 +29,7 @@ function Stock() {
   const visualDeals = Math.min(Math.ceil(stock.length / 10), 5);
 
   return (
-    <div className="flex flex-row absolute bottom-5 right-8 rounded-md shadow-md">
+    <div className={`flex flex-row absolute bottom-5 right-8 rounded-md shadow-md ${hintClass}`}>
       {Array.from({ length: visualDeals }).map((_, i) => {
         const isClickable = i === 0; // Seule la première carte (à gauche) est cliquable
         const zIndex = visualDeals - i; // Le z-index le plus élevé pour la première carte

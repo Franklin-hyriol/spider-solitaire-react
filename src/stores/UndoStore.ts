@@ -14,6 +14,7 @@ type UndoStore = {
   previousState: UndoState | null;
   setPreviousState: () => void;
   undo: () => void;
+  clearUndo: () => void;
 };
 
 export const useUndoStore = create(
@@ -32,6 +33,7 @@ export const useUndoStore = create(
           set({ previousState: null });
         }
       },
+      clearUndo: () => set({ previousState: null }),
     }),
     {
       name: "solitaire-game-undo-state",

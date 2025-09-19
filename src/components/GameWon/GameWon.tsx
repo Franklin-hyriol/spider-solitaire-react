@@ -14,7 +14,9 @@ type GameWonProps = {
 };
 
 export default function GameWon({ onNewGame, onRestart }: GameWonProps) {
-  const { elapsedTime, moves, money } = useGameStatsStore();
+  const elapsedTime = useGameStatsStore((state) => state.elapsedTime);
+  const moves = useGameStatsStore((state) => state.moves);
+  const money = useGameStatsStore((state) => state.money);
   const level = useColumnsStore((state) => state.level);
 
   // Formate le temps pour l'affichage

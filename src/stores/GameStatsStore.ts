@@ -1,7 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { type GameStatsStore } from "../types";
-// import { cryptoLocalStorage } from "../helpers/cryptoLocalStorage"; // Import the custom storage
+import { useColumnsStore } from "./ColumnStore";
+import { useHintStore } from "./HintStore";
+import { findAllMoves } from "../logic/gameLogic";
 
 export const useGameStatsStore = create(
     persist<GameStatsStore>(
@@ -40,6 +42,25 @@ export const useGameStatsStore = create(
             addHint: () => set((s) => ({ hints: s.hints + 1 })),
             addMoney: (amount) => set((s) => ({ money: s.money + amount })),
             addCompletedSet: () => set((s) => ({ completedSets: s.completedSets + 1 })),
+
+            showHint: () => {
+                const { allHints } = useHintStore.getState();
+                const { columns, stock } = useColumnsStore.getState();
+
+                let hintsToCache = allHints;
+
+                // Si le cache est vide, on calcule les indices et on les stocke
+                if (hintsToCache.length === 0) {
+                    hintsToCache = findAllMoves(columns, stock);
+                    useHintStore.getState().setAllHints(hintsToCache);
+                }
+
+                // Si des indices existent (après calcul si nécessaire), on déclenche la séquence
+                if (useHintStore.getState().allHints.length > 0) {
+                    get().addHint();
+                    useHintStore.getState().triggerHintSequence();
+                }
+            },
 
             getElapsed: () => get().elapsedTime,
         }),

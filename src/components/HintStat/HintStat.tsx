@@ -5,6 +5,7 @@ import { useGameStatsStore } from "../../stores/GameStatsStore";
 
 export default function HintStat() {
   const hints = useGameStatsStore((state) => state.hints);
+  const showHint = useGameStatsStore((state) => state.showHint);
 
   const formattedHints = hints.toString().padStart(4, "0");
 
@@ -15,7 +16,7 @@ export default function HintStat() {
         className="btn btn-primary btn-sm btn-circle absolute top-2.5 right-2"
         aria-label="Demander un indice"
         title="Demander un indice"
-        onClick={() => {}}
+        onClick={showHint}
       >
         <FaRegLightbulb />
       </button>
