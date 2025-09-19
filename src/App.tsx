@@ -15,10 +15,20 @@ import GameWon from "./components/GameWon/GameWon";
 import HelpPopup from "./components/HelpPopup/HelpPopup";
 
 function App() {
-  const { initGame, columns, restartGame, isGameWon } = useColumnsStore();
+  const initGame = useColumnsStore((state) => state.initGame);
+  const columns = useColumnsStore((state) => state.columns);
+  const restartGame = useColumnsStore((state) => state.restartGame);
+  const isGameWon = useColumnsStore((state) => state.isGameWon);
+
   const initialColumnsLength = useRef(columns.length);
-  const { start: startChrono, pause: pauseChrono, resume: resumeChrono, reset: resetStats } = useGameStatsStore();
-  const { type: popupType, open: openPopup, close: closePopup } = usePopupStore();
+  const startChrono = useGameStatsStore((state) => state.start);
+  const pauseChrono = useGameStatsStore((state) => state.pause);
+  const resumeChrono = useGameStatsStore((state) => state.resume);
+  const resetStats = useGameStatsStore((state) => state.reset);
+
+  const popupType = usePopupStore((state) => state.type);
+  const openPopup = usePopupStore((state) => state.open);
+  const closePopup = usePopupStore((state) => state.close);
 
   // Logique de démarrage de l'application
   useEffect(() => {
