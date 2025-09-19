@@ -8,7 +8,7 @@ import { useHintStore } from "../../stores/HintStore";
 function Stock() {
   const stock = useColumnsStore((state) => state.stock);
   const dealFromStock = useColumnsStore((state) => state.dealFromStock);
-  const hint = useHintStore((state) => state.hint);
+  const hint = useHintStore((state) => state.currentHint);
 
   const hintClass = hint?.type === "stock" ? "shadow-[0_0_15px_5px] shadow-green-500 rounded-md" : "";
 

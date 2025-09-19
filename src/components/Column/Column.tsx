@@ -15,7 +15,7 @@ interface ColumnProps {
  */
 function ColumnComponent({ columnId, cards }: ColumnProps) {
   const { setNodeRef } = useDroppable({ id: columnId });
-  const hint = useHintStore((state) => state.hint);
+  const hint = useHintStore((state) => state.currentHint);
 
   const getMarginTop = (card: ICard, index: number) => {
     if (index === 0) {

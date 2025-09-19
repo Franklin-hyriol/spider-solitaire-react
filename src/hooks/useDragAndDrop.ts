@@ -10,6 +10,9 @@ import { useColumnsStore } from "../stores/ColumnStore";
 import { isDraggableStack, isValidDropTarget } from "../logic/dndValidation";
 import { moveCardStack } from "../logic/dndState";
 import { checkForCompletedSet } from "../helpers/cardHelpers";
+import { useHintStore } from "../stores/HintStore";
+
+
 import { useDragStore } from "../stores/DragStore"; // Import the new store
 import { useUndoStore } from "../stores/UndoStore";
 
@@ -115,6 +118,7 @@ export function useDragAndDrop() {
         overColId
       );
       setColumns(newColumnsState);
+      useHintStore.getState().clearAllHints(); // Invalider le cache d'indices
 
       revealLastCard(String(activeColId));
 

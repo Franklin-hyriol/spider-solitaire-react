@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 import { type GameStatsStore } from "../types";
 import { useColumnsStore } from "./ColumnStore";
 import { useHintStore } from "./HintStore";
-import { findBestMove } from "../logic/gameLogic";
+import { findAllMoves } from "../logic/gameLogic";
 
 export const useGameStatsStore = create(
     persist<GameStatsStore>(
@@ -44,16 +44,24 @@ export const useGameStatsStore = create(
             addCompletedSet: () => set((s) => ({ completedSets: s.completedSets + 1 })),
 
             showHint: () => {
+                const { allHints } = useHintStore.getState();
                 const { columns, stock } = useColumnsStore.getState();
-                const bestMove = findBestMove(columns, stock);
 
-                if (bestMove) {
-                    get().addHint();
-                    useHintStore.getState().setHint(bestMove);
+                let hintsToShow = allHints;
+
+                // Si le cache est vide, on calcule les indices
+                if (hintsToShow.length === 0) {
+                    hintsToShow = findAllMoves(columns, stock);
+                    useHintStore.getState().setAllHints(hintsToShow);
+                }
+
+                if (hintsToShow.length > 0) {
+                    get().addHint(); // On ne compte l'indice que si un mouvement est possible
+                    useHintStore.getState().showNextHint();
 
                     // Efface l'indice visuel après 3 secondes
                     setTimeout(() => {
-                        useHintStore.getState().clearHint();
+                        useHintStore.getState().setCurrentHint(null);
                     }, 3000);
                 }
             },

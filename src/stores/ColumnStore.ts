@@ -5,6 +5,7 @@ import { COLUMN_COUNT } from "../constants/game";
 import { shuffleArray } from "../utils/arrayUtils";
 import { createDeck } from "../helpers/cardHelpers";
 import { useUndoStore } from "./UndoStore";
+import { useHintStore } from "./HintStore";
 import { hasPossibleMoves } from "../logic/gameLogic";
 
 /**
@@ -165,9 +166,11 @@ export const useColumnsStore = create(
           );
 
           if (allFoundationsFull) {
+            useHintStore.getState().clearAllHints(); // Invalider le cache d'indices
             return { columns: newColumns, foundation: newFoundation, isGameWon: true };
           }
 
+          useHintStore.getState().clearAllHints(); // Invalider le cache d'indices
           return { columns: newColumns, foundation: newFoundation };
         }),
     }),
