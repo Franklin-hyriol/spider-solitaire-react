@@ -12,7 +12,7 @@ export function CardOverlay({ stack }: { stack: ICard[] }) {
         <div
           key={card.id}
           className={`${getCardClass(card.id, card.value)} w-full cursor-grabbing ${
-            index !== 0 ? (card.faceUp ? "-mt-51" : "-mt-56") : ""
+            index !== 0 ? (card.faceUp ? "-mt-50.5" : "-mt-57") : ""
           }`}
         />
       ))}

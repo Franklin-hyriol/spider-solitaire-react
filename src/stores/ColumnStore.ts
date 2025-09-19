@@ -107,6 +107,7 @@ export const useColumnsStore = create(
         })),
 
       dealFromStock: () => {
+        useHintStore.getState().clearAllHints();
         useUndoStore.getState().setPreviousState();
         set((state) => {
           // Règle du Spider: On ne peut pas distribuer si une colonne est vide.
