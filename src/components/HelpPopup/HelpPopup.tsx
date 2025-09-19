@@ -6,7 +6,7 @@ type HelpPopupProps = {
 
 const HelpPopup: React.FC<HelpPopupProps> = ({ onClose }) => {
   return (
-    <div className="max-w-lg w-[500px] h-fit p-8 flex flex-col items-center gap-4 bg-white rounded-lg shadow-xl overflow-y-auto max-h-[80vh] scrollbar-hidden">
+    <div className="max-w-lg w-[var(--apx-500)] h-fit p-8 flex flex-col items-center gap-4 bg-white rounded-lg shadow-xl overflow-y-auto max-h-[80vh] scrollbar-hidden">
       <div className="w-full flex justify-center items-center pb-4 border-b-4 border-emerald-600">
         <h2 className="text-3xl font-bold text-emerald-800">Aide</h2>
       </div>

@@ -7,21 +7,23 @@ interface IGameOverProps {
 
 export default function GameOver({ onRestart, onNewGame }: IGameOverProps) {
   return (
-    <div className="text-center p-8 bg-gray-800 rounded-lg shadow-xl border border-gray-700">
-      <h2 className="text-4xl font-bold text-red-500 mb-4">Game Over</h2>
-      <p className="text-gray-300 mb-8">Aucun mouvement possible.</p>
+    <div className="max-w-md w-[448px] h-fit p-8 flex flex-col items-center gap-4">
+      <h2 className="w-full text-center text-3xl font-bold text-red-800 mb-4 pb-4 border-b-4 border-red-600">
+        Game Over
+      </h2>
+      <p className="text-center text-lg mb-6">Aucun mouvement possible.</p>
 
-      <div className="flex justify-center gap-4">
+      <div className="flex gap-4 w-full">
         <button
           onClick={onRestart}
-          className="btn btn-warning btn-lg flex items-center gap-2"
+          className="btn btn-dash btn-secondary flex-1"
         >
           <RiRestartLine />
           Recommencer
         </button>
         <button
           onClick={onNewGame}
-          className="btn btn-primary btn-lg flex items-center gap-2"
+          className="btn btn-dash btn-primary flex-1"
         >
           <RiAddCircleLine />
           Nouvelle Partie
