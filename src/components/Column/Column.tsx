@@ -25,7 +25,7 @@ function ColumnComponent({ columnId, cards }: ColumnProps) {
   return (
     <div
       ref={setNodeRef}
-      className="min-h-[calc(100vh-4rem)] p-0.5 rounded bg-gray-100"
+      className="min-h-[calc(100vh-4rem)] p-0.5 rounded"
     >
         {cards?.map((card, index) => (
           <div key={card.id} className={getMarginTop(card, index)}>

@@ -33,7 +33,7 @@ function Stock() {
               key={i}
               onClick={dealFromStock}
               style={{ zIndex: zIndex }}
-              className={`w-30 h-fit hover:scale-105 active:scale-95 transition-all cursor-pointer hover:shadow-[0px_0px_17px_2px_rgba(59,_130,_246,_0.5)]`}
+              className={`w-30 h-fit hover:scale-105 active:scale-95 transition-all cursor-pointer hover:shadow-[0px_0px_10px_2px_var(--color-primary)]`}
               aria-label={`Pioche, ${stock.length} cartes restantes`}
             >
               <div className="pcard-back w-full h-full" />
