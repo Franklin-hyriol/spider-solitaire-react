@@ -4,9 +4,113 @@
   themes: emerald --default, dark, dracula, fantasy, valentine;
 }
 
+:root {
+  --apx-2: 0.104166vw;
+  --apx-4: 0.208332vw;
+  --apx-6: 0.312498vw;
+  --apx-8: 0.416664vw;
+  --apx-10: 0.520830vw;
+  --apx-12: 0.624996vw;
+  --apx-14: 0.729162vw;
+  --apx-16: 0.833328vw;
+  --apx-18: 0.937494vw;
+  --apx-20: 1.041660vw;
+  --apx-24: 1.249992vw;
+  --apx-30: 1.562490vw;
+  --apx-32: 1.666656vw;
+  --apx-36: 1.874988vw;
+  --apx-48: 2.499984vw;
+  --apx-60: 3.124980vw;
+  --apx-64: 3.333312vw;
+  --apx-96: 4.999968vw;
+
+  --size-field: var(--apx-4);
+}
+
+
+/* Override tailwind variable */
 @theme {
   --color-square: oklch(from var(--color-base-content) l c h / 0.1);
+
+  --spacing: var(--apx-4);
+
+  /* ─── Font size ─── */
+  --text-xs: var(--apx-12);
+  --text-sm: var(--apx-14);
+  --text-base: var(--apx-16);
+  --text-lg: var(--apx-18);
+  --text-xl: var(--apx-20);
+  --text-2xl: var(--apx-24);
+  --text-3xl: var(--apx-30);
+  --text-4xl: var(--apx-36);
+  --text-5xl: var(--apx-48);
+  --text-6xl: var(--apx-60);
+
+  /* ─── Radius ─── */
+  --radius-sm: var(--apx-2);
+  --radius: var(--apx-4);
+  /* default */
+  --radius-md: var(--apx-6);
+  --radius-lg: var(--apx-8);
+  --radius-xl: var(--apx-12);
+  --radius-2xl: var(--apx-16);
+  --radius-full: 9999px;
+
+  /* ─── Blur / Drop shadow / Perspective ─── */
+  --blur-sm: var(--apx-4);
+  --blur-md: var(--apx-8);
+  --blur-lg: var(--apx-16);
+
+  --perspective-near: var(--apx-32);
+  --perspective-mid: var(--apx-64);
+  --perspective-far: var(--apx-96);
 }
+
+
+/* Override DaisyUI */
+@utility btn {
+
+
+  --fontsize: var(--apx-14);
+  /* taille texte par défaut */
+  --btn-p: var(--apx-16);
+  /* padding par défaut */
+  --size: calc(var(--size-field, var(--apx-4)) * 10);
+}
+
+
+
+/* ─── Variations de tailles ─── */
+@utility btn-xs {
+  --fontsize: var(--apx-10);
+  --btn-p: var(--apx-8);
+  --size: calc(var(--size-field, var(--apx-4)) * 6);
+}
+
+@utility btn-sm {
+  --fontsize: var(--apx-12);
+  --btn-p: var(--apx-12);
+  --size: calc(var(--size-field, var(--apx-4)) * 8);
+}
+
+@utility btn-md {
+  --fontsize: var(--apx-14);
+  --btn-p: var(--apx-16);
+  --size: calc(var(--size-field, var(--apx-4)) * 10);
+}
+
+@utility btn-lg {
+  --fontsize: var(--apx-18);
+  --btn-p: var(--apx-20);
+  --size: calc(var(--size-field, var(--apx-4)) * 12);
+}
+
+@utility btn-xl {
+  --fontsize: var(--apx-24);
+  --btn-p: var(--apx-24);
+  --size: calc(var(--size-field, var(--apx-4)) * 16);
+}
+
 
 
 /* Card Styles */
