@@ -42,29 +42,26 @@ export interface StatProps {
 
 // Store dédié aux stats du jeu (timer, argent, coups, suites complétées)
 export interface GameStatsStore {
-  elapsedTime: number; // secondes écoulées
-  isRunning: boolean; // chrono en cours ou non
-  money: number;
-  moves: number;
-  completedSets: number;
-  gameStartDate: number | null; // timestamp de début de la partie pour lister les saves
-  undos: number;
-  hints: number;
-
-  // actions pour gérer le jeu
-  start: () => void;
-  pause: () => void;
-  resume: () => void;
-  reset: () => void;
-  incrementTime: () => void;
-  addMove: () => void;
-  addUndo: () => void;
-  addHint: () => void;
-  addMoney: (amount: number) => void;
-  addCompletedSet: () => void;
-
-  // getter pour obtenir le temps écoulé
-  getElapsed: () => number;
+    elapsedTime: number;
+    isRunning: boolean;
+    money: number;
+    moves: number;
+    completedSets: number;
+    gameStartDate: Date | null;
+    undos: number;
+    hints: number;
+    start: () => void;
+    pause: () => void;
+    resume: () => void;
+    incrementTime: () => void;
+    reset: () => void;
+    addMove: () => void;
+    addUndo: () => void;
+    addHint: () => void;
+    addMoney: (amount: number) => void;
+    addCompletedSet: () => void;
+    showHint: () => void;
+    getElapsed: () => number;
 }
 
 

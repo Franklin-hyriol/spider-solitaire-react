@@ -30,7 +30,7 @@ export const useColumnsStore = create(
         }
 
         // S'il n'y a plus de mouvement possible, c'est game over
-        if (!hasPossibleMoves(columns)) {
+        if (get().stock.length === 0 && !hasPossibleMoves(columns, get().stock)) {
           set({ isGameOver: true });
         }
       },

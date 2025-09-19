@@ -1,7 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { type GameStatsStore } from "../types";
-// import { cryptoLocalStorage } from "../helpers/cryptoLocalStorage"; // Import the custom storage
+import { useColumnsStore } from "./ColumnStore";
+import { useHintStore } from "./HintStore";
+import { findBestMove } from "../logic/gameLogic";
 
 export const useGameStatsStore = create(
     persist<GameStatsStore>(
@@ -40,6 +42,21 @@ export const useGameStatsStore = create(
             addHint: () => set((s) => ({ hints: s.hints + 1 })),
             addMoney: (amount) => set((s) => ({ money: s.money + amount })),
             addCompletedSet: () => set((s) => ({ completedSets: s.completedSets + 1 })),
+
+            showHint: () => {
+                const { columns, stock } = useColumnsStore.getState();
+                const bestMove = findBestMove(columns, stock);
+
+                if (bestMove) {
+                    get().addHint();
+                    useHintStore.getState().setHint(bestMove);
+
+                    // Efface l'indice visuel après 3 secondes
+                    setTimeout(() => {
+                        useHintStore.getState().clearHint();
+                    }, 3000);
+                }
+            },
 
             getElapsed: () => get().elapsedTime,
         }),
