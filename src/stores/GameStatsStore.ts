@@ -47,22 +47,18 @@ export const useGameStatsStore = create(
                 const { allHints } = useHintStore.getState();
                 const { columns, stock } = useColumnsStore.getState();
 
-                let hintsToShow = allHints;
+                let hintsToCache = allHints;
 
-                // Si le cache est vide, on calcule les indices
-                if (hintsToShow.length === 0) {
-                    hintsToShow = findAllMoves(columns, stock);
-                    useHintStore.getState().setAllHints(hintsToShow);
+                // Si le cache est vide, on calcule les indices et on les stocke
+                if (hintsToCache.length === 0) {
+                    hintsToCache = findAllMoves(columns, stock);
+                    useHintStore.getState().setAllHints(hintsToCache);
                 }
 
-                if (hintsToShow.length > 0) {
-                    get().addHint(); // On ne compte l'indice que si un mouvement est possible
-                    useHintStore.getState().showNextHint();
-
-                    // Efface l'indice visuel après 3 secondes
-                    setTimeout(() => {
-                        useHintStore.getState().setCurrentHint(null);
-                    }, 3000);
+                // Si des indices existent (après calcul si nécessaire), on déclenche la séquence
+                if (useHintStore.getState().allHints.length > 0) {
+                    get().addHint();
+                    useHintStore.getState().triggerHintSequence();
                 }
             },
 

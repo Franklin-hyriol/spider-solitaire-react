@@ -15,7 +15,8 @@ interface ColumnProps {
  */
 function ColumnComponent({ columnId, cards }: ColumnProps) {
   const { setNodeRef } = useDroppable({ id: columnId });
-  const hint = useHintStore((state) => state.currentHint);
+  const hintToShow = useHintStore((state) => state.hintToShow);
+  const hintPhase = useHintStore((state) => state.hintPhase);
 
   const getMarginTop = (card: ICard, index: number) => {
     if (index === 0) {
@@ -25,30 +26,35 @@ function ColumnComponent({ columnId, cards }: ColumnProps) {
   };
 
   let hintClass = "";
-  if (hint?.type === "move" && hint.sourceColId === columnId) {
-    hintClass = "animate-pulse-green";
-  }
-  if (hint?.type === "move" && hint.destColId === columnId) {
-    hintClass = "animate-pulse-blue";
-  }
-  if (hint?.type === "foundation" && hint.sourceColId === columnId) {
-    hintClass = "animate-pulse-green";
+  if (hintToShow && hintPhase !== "idle") {
+    // Indice pour un mouvement entre colonnes
+    if (hintToShow.type === "move") {
+      if (hintToShow.sourceColId === columnId) {
+        hintClass = "animate-pulse-green"; // La source est toujours verte
+      }
+      if (hintPhase === "dest" && hintToShow.destColId === columnId) {
+        hintClass = "animate-pulse-blue"; // La destination devient bleue en phase 2
+      }
+    }
+    // Indice pour une fondation (juste une source)
+    if (
+      hintToShow.type === "foundation" &&
+      hintToShow.sourceColId === columnId
+    ) {
+      hintClass = "animate-pulse-green";
+    }
   }
 
   return (
     <div
       ref={setNodeRef}
-      className={`min-h-[calc(100vh-4rem)] p-0.5 rounded transition-shadow duration-300 ${hintClass}`}
+      className={`min-h-[calc(100vh-4rem)] p-0.5 rounded ${hintClass}`}
     >
-        {cards?.map((card, index) => (
-          <div key={card.id} className={getMarginTop(card, index)}>
-            <Card
-              id={card.id}
-              value={card.value}
-              faceUp={card.faceUp}
-            />
-          </div>
-        ))}
+      {cards?.map((card, index) => (
+        <div key={card.id} className={getMarginTop(card, index)}>
+          <Card id={card.id} value={card.value} faceUp={card.faceUp} />
+        </div>
+      ))}
     </div>
   );
 }
