@@ -5,8 +5,7 @@ import { COLUMN_COUNT } from "../constants/game";
 import { shuffleArray } from "../utils/arrayUtils";
 import { createDeck } from "../helpers/cardHelpers";
 import { useUndoStore } from "./UndoStore";
-
-
+import { hasPossibleMoves } from "../logic/gameLogic";
 
 /**
  * Store Zustand pour gérer l'état global du jeu (colonnes et cartes).
@@ -20,17 +19,36 @@ export const useColumnsStore = create(
       columns: [],
       foundation: [],
       stock: [],
-      setColumns: (updater) =>
-        set((state) => ({
-          columns:
-            typeof updater === "function" ? updater(state.columns) : updater,
-        })),
+      isGameWon: false,
+      isGameOver: false,
+
+      checkGameOver: () => {
+        const { stock, columns } = get();
+        // La partie ne peut pas être terminée s'il reste des cartes dans la pioche
+        if (stock.length > 0) {
+          return;
+        }
+
+        // S'il n'y a plus de mouvement possible, c'est game over
+        if (!hasPossibleMoves(columns)) {
+          set({ isGameOver: true });
+        }
+      },
+
+      setColumns: (updater) => {
+        const newColumns =
+          typeof updater === "function" ? updater(get().columns) : updater;
+        set({ columns: newColumns });
+        get().checkGameOver(); // Vérifie le game over après chaque modification des colonnes
+      },
+
       updateColumn: (id, newColumn) =>
         set((state) => ({
           columns: state.columns.map((col) =>
             col.id === id ? { ...col, ...newColumn } : col
           ),
         })),
+
       initGame: (level: Level) => {
         const shuffledCards = shuffleArray(createDeck(level));
         const newColumns: IColumn[] = [];
@@ -64,12 +82,14 @@ export const useColumnsStore = create(
           cards: [],
         }));
 
-        set({ level, columns: newColumns, foundation, stock, isGameWon: false });
+        set({ level, columns: newColumns, foundation, stock, isGameWon: false, isGameOver: false });
       },
+
       restartGame: () => {
         const { level, initGame } = get();
         initGame(level);
       },
+
       revealLastCard: (columnId) =>
         set((state) => ({
           columns: state.columns.map((col) => {
@@ -84,6 +104,7 @@ export const useColumnsStore = create(
             return col;
           }),
         })),
+
       dealFromStock: () => {
         useUndoStore.getState().setPreviousState();
         set((state) => {
@@ -93,8 +114,8 @@ export const useColumnsStore = create(
             return state;
           }
 
-          // Ne rien faire si la pioche contient moins de 10 cartes
-          if (state.stock.length < 10) {
+          // Ne rien faire si la pioche est vide
+          if (state.stock.length === 0) {
             return state;
           }
 
@@ -114,7 +135,9 @@ export const useColumnsStore = create(
 
           return { stock: newStock, columns: newColumns };
         });
+        get().checkGameOver(); // Vérifie le game over après la distribution
       },
+
       moveToFoundation: (stack, sourceColumnId, foundationId) =>
         set((state) => {
           // Retire la pile de la colonne d'origine

@@ -13,12 +13,14 @@ import ConfirmAction from "./components/ConfirmAction/ConfirmAction";
 
 import GameWon from "./components/GameWon/GameWon";
 import HelpPopup from "./components/HelpPopup/HelpPopup";
+import GameOver from "./components/GameOver/GameOver";
 
 function App() {
   const initGame = useColumnsStore((state) => state.initGame);
   const columns = useColumnsStore((state) => state.columns);
   const restartGame = useColumnsStore((state) => state.restartGame);
   const isGameWon = useColumnsStore((state) => state.isGameWon);
+  const isGameOver = useColumnsStore((state) => state.isGameOver);
 
   const initialColumnsLength = useRef(columns.length);
   const startChrono = useGameStatsStore((state) => state.start);
@@ -56,6 +58,13 @@ function App() {
       openPopup("gameWon");
     }
   }, [isGameWon, openPopup]);
+
+  // Ouvre le popup de game over quand la partie est perdue
+  useEffect(() => {
+    if (isGameOver) {
+      openPopup("gameOver");
+    }
+  }, [isGameOver, openPopup]);
 
   const handlePlay = (level: Level) => {
     resetStats();
@@ -120,6 +129,18 @@ function App() {
         closeOnOverlayClick={false}
       >
         <GameWon
+          onNewGame={() => openPopup("new")}
+          onRestart={() => executeRestart()}
+        />
+      </Popup>
+
+      {/* Popup de Game Over */}
+      <Popup
+        open={popupType === "gameOver"}
+        setOpen={closePopup}
+        closeOnOverlayClick={false}
+      >
+        <GameOver
           onNewGame={() => openPopup("new")}
           onRestart={() => executeRestart()}
         />

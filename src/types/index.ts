@@ -20,6 +20,7 @@ export interface ColumnsStore {
   foundation: IColumn[];
   stock: ICard[];
   isGameWon?: boolean;
+  isGameOver?: boolean;
   setColumns: (updater: IColumn[] | ((prev: IColumn[]) => IColumn[])) => void;
   updateColumn: (id: string, newColumn: Partial<IColumn>) => void;
   initGame: (level: Level) => void;
@@ -27,6 +28,7 @@ export interface ColumnsStore {
   revealLastCard: (columnId: string) => void;
   dealFromStock: () => void;
   moveToFoundation: (stack: ICard[], sourceColumnId: string, foundationId: string) => void;
+  checkGameOver: () => void;
 }
 
 
@@ -67,7 +69,7 @@ export interface GameStatsStore {
 
 
 // Type pour les popups
-export type PopupType = "new" | "pause" | "quit" | "confirmRestart" | "gameWon" | "help" | boolean;
+export type PopupType = "new" | "pause" | "quit" | "confirmRestart" | "gameWon" | "gameOver" | "help" | boolean;
 
 // Niveaux de difficulté
 export type Level = "easy" | "medium" | "hard";
