@@ -82,7 +82,6 @@ export function useDragAndDrop() {
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
-    setPreviousState();
     const { active, over } = event;
 
     if (!over || !draggedStack) {
@@ -105,6 +104,7 @@ export function useDragAndDrop() {
 
     const overColumn = columns.find((c) => c.id === overColId);
     if (isValidDropTarget(draggedStack, overColumn?.cards)) {
+      setPreviousState(); // Save state only on a valid move
       addMove();
       addMoney(-10);
 
