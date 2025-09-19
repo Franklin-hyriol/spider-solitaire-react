@@ -9,6 +9,8 @@ import PauseGame from "../PauseGame/PauseGame";
 import Popup from "../Popup/Popup";
 import { useGameStatsStore } from "../../stores/GameStatsStore";
 import { Level } from "../../types";
+import { useHintStore } from "../../stores/HintStore";
+import { useUndoStore } from "../../stores/UndoStore";
 
 function PopupManager() {
   const initGame = useColumnsStore((state) => state.initGame);
@@ -21,7 +23,12 @@ function PopupManager() {
   const openPopup = usePopupStore((state) => state.open);
   const closePopup = usePopupStore((state) => state.close);
 
+  const clearAllHints = useHintStore((state) => state.clearAllHints);
+  const clearUndo = useUndoStore((state) => state.clearUndo);
+
   const handlePlay = (level: Level) => {
+    clearAllHints();
+    clearUndo();
     resetStats();
     initGame(level);
     startChrono();
@@ -29,6 +36,8 @@ function PopupManager() {
   };
 
   const executeRestart = () => {
+    clearAllHints();
+    clearUndo();
     resetStats();
     restartGame();
     startChrono();

@@ -15,6 +15,7 @@ export type Hint =
  */
 export function findAllMoves(columns: IColumn[], stock: ICard[]): Hint[] {
   const foundationMoves: Hint[] = [];
+  const revealCardMoves: Hint[] = [];
   const sameSuitMoves: Hint[] = [];
   const otherMoves: Hint[] = [];
 
@@ -27,13 +28,16 @@ export function findAllMoves(columns: IColumn[], stock: ICard[]): Hint[] {
     }
   }
 
-  // Priorités 2 & 3: Chercher les mouvements entre colonnes
+  // Priorités 2, 3 & 4: Chercher les mouvements entre colonnes
   for (const sourceColumn of columns) {
     if (!sourceColumn.cards || sourceColumn.cards.length === 0) continue;
 
     for (let i = 0; i < sourceColumn.cards.length; i++) {
       const stackToDrag = sourceColumn.cards.slice(i);
       if (!isDraggableStack(stackToDrag)) continue;
+
+      // On vérifie si ce mouvement révélera une carte cachée
+      const revealsCard = i > 0 && !sourceColumn.cards[i - 1].faceUp;
 
       for (const destinationColumn of columns) {
         if (sourceColumn.id === destinationColumn.id) continue;
@@ -45,24 +49,34 @@ export function findAllMoves(columns: IColumn[], stock: ICard[]): Hint[] {
             destColId: destinationColumn.id,
           };
 
-          // Priorité 2: Continuation d'une suite de même couleur
-          const topOfStack = stackToDrag[0];
-          const destCard = destinationColumn.cards?.[destinationColumn.cards.length - 1];
-          // La couleur est le premier caractère de l'ID (ex: 'h' pour 'h10-1')
-          if (destCard && topOfStack.id[0] === destCard.id[0]) {
-            sameSuitMoves.push(currentMove);
+          // Priorité 2: Révéler une carte
+          if (revealsCard) {
+            revealCardMoves.push(currentMove);
           } else {
-            // Priorité 3: Autre mouvement valide
-            otherMoves.push(currentMove);
+            // Priorité 3: Continuation d'une suite de même couleur
+            const topOfStack = stackToDrag[0];
+            const destCard =
+              destinationColumn.cards?.[destinationColumn.cards.length - 1];
+            if (destCard && topOfStack.id[0] === destCard.id[0]) {
+              sameSuitMoves.push(currentMove);
+            } else {
+              // Priorité 4: Autre mouvement valide
+              otherMoves.push(currentMove);
+            }
           }
         }
       }
     }
   }
 
-  const allMoves = [...foundationMoves, ...sameSuitMoves, ...otherMoves];
+  const allMoves = [
+    ...foundationMoves,
+    ...revealCardMoves,
+    ...sameSuitMoves,
+    ...otherMoves,
+  ];
 
-  // Priorité 4: Suggérer la pioche si aucun autre mouvement n'est possible
+  // Priorité 5: Suggérer la pioche si aucun autre mouvement n'est possible
   if (allMoves.length === 0 && stock.length > 0) {
     return [{ type: "stock" }];
   }
