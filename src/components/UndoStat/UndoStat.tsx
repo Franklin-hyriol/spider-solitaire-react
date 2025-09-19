@@ -6,6 +6,7 @@ import { useUndoStore } from "../../stores/UndoStore";
 export default function UndoStat() {
   const undos = useGameStatsStore((state) => state.undos);
   const undo = useUndoStore((state) => state.undo);
+  const previousState = useUndoStore((state) => state.previousState);
 
   const formattedUndos = undos.toString().padStart(4, "0");
 
@@ -17,6 +18,7 @@ export default function UndoStat() {
         aria-label="Annuler le dernier coup"
         title="Annuler le dernier coup"
         onClick={undo}
+        disabled={!previousState}
       >
         <HiOutlineArrowUturnLeft />
       </button>

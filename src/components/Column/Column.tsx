@@ -22,7 +22,7 @@ function ColumnComponent({ columnId, cards }: ColumnProps) {
     if (index === 0) {
       return "";
     }
-    return card.faceUp ? "-mt-50.5" : "-mt-56";
+    return card.faceUp ? "-mt-50.5" : "-mt-57";
   };
 
   let hintClass = "";
@@ -48,7 +48,7 @@ function ColumnComponent({ columnId, cards }: ColumnProps) {
   return (
     <div
       ref={setNodeRef}
-      className={`min-h-[calc(100vh-4rem)] p-0.5 rounded ${hintClass}`}
+      className={`min-h-[calc(100vh-4rem)] p-0.5 ${hintClass}`}
     >
       {cards?.map((card, index) => (
         <div key={card.id} className={getMarginTop(card, index)}>

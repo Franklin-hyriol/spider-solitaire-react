@@ -3,6 +3,7 @@ import {
   DragOverlay,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   pointerWithin,
   useSensor,
   useSensors,
@@ -33,7 +34,13 @@ export function GameSurface() {
         distance: 8, // 8px of movement required to activate
       },
     }),
-    useSensor(KeyboardSensor)
+    useSensor(KeyboardSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    })
   );
 
   return (
@@ -45,7 +52,7 @@ export function GameSurface() {
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      <main className="bg-[var(--color-base-200)] bg-[linear-gradient(var(--color-square)_1px,transparent_1px),linear-gradient(90deg,var(--color-square)_1px,transparent_1px)] bg-[length:15px_15px] h-[calc(100vh-32px)] w-full relative">
+      <main className="bg-[var(--color-base-100)] bg-[linear-gradient(var(--color-square)_1px,transparent_1px),linear-gradient(90deg,var(--color-square)_1px,transparent_1px)] bg-[length:20px_20px] h-[calc(100vh-var(--apx-32))] w-full relative overflow-hidden">
         <div className="py-4 px-8 h-full">
           <Board />
         </div>
