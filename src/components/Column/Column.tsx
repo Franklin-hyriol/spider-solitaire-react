@@ -26,13 +26,13 @@ function ColumnComponent({ columnId, cards }: ColumnProps) {
 
   let hintClass = "";
   if (hint?.type === "move" && hint.sourceColId === columnId) {
-    hintClass = "shadow-[0_0_15px_5px] shadow-green-500 rounded-md";
+    hintClass = "animate-pulse-green";
   }
   if (hint?.type === "move" && hint.destColId === columnId) {
-    hintClass = "shadow-[0_0_15px_5px] shadow-red-500 rounded-md";
+    hintClass = "animate-pulse-blue";
   }
   if (hint?.type === "foundation" && hint.sourceColId === columnId) {
-    hintClass = "shadow-[0_0_15px_5px] shadow-green-500 rounded-md";
+    hintClass = "animate-pulse-green";
   }
 
   return (

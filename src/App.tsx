@@ -14,6 +14,7 @@ import ConfirmAction from "./components/ConfirmAction/ConfirmAction";
 import GameWon from "./components/GameWon/GameWon";
 import HelpPopup from "./components/HelpPopup/HelpPopup";
 import GameOver from "./components/GameOver/GameOver";
+import "./app.css";
 
 function App() {
   const initGame = useColumnsStore((state) => state.initGame);

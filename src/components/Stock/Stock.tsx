@@ -10,7 +10,7 @@ function Stock() {
   const dealFromStock = useColumnsStore((state) => state.dealFromStock);
   const hint = useHintStore((state) => state.currentHint);
 
-  const hintClass = hint?.type === "stock" ? "shadow-[0_0_15px_5px] shadow-green-500 rounded-md" : "";
+  const hintClass = hint?.type === "stock" ? "animate-pulse-green" : "";
 
   // Cas 1: La pioche est vide, on affiche un emplacement grisé
   if (stock.length === 0) {
