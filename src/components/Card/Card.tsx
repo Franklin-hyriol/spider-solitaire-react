@@ -22,6 +22,7 @@ function CardComponent({ id, value, faceUp }: ICard) {
   return (
     <div
       ref={setNodeRef}
+      style={{ touchAction: "none" }}
       {...attributes}
       // N'attache les écouteurs de glissement que si la carte est face visible
       {...(faceUp ? listeners : {})}

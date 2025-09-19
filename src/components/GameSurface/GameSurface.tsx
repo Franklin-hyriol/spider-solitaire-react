@@ -3,6 +3,7 @@ import {
   DragOverlay,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   pointerWithin,
   useSensor,
   useSensors,
@@ -33,7 +34,13 @@ export function GameSurface() {
         distance: 8, // 8px of movement required to activate
       },
     }),
-    useSensor(KeyboardSensor)
+    useSensor(KeyboardSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    })
   );
 
   return (
