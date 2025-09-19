@@ -30,7 +30,7 @@ function Header({ onRestart, onHelp }: HeaderProps) {
 
   return (
     <>
-      <header className="bg-base-100 shadow-sm">
+      <header className="bg-base-100 shadow-lg">
         <div className="flex justify-between px-4 py-1.5 text-sm items-center w-full">
           <ul className="flex gap-4">
             <li className="dropdown dropdown-start">
@@ -43,7 +43,7 @@ function Header({ onRestart, onHelp }: HeaderProps) {
 
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                className="menu menu-md dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
               >
                 <li>
                   <button
@@ -105,7 +105,7 @@ function Header({ onRestart, onHelp }: HeaderProps) {
               <span className="underline">D</span>istribuer
             </li>
             <li className="cursor-pointer hover:text-primary" onClick={() => handleMenuClick(onHelp)}>
-              <span className="underline">?</span> 
+              <span className="underline">A</span>ide
             </li>
           </ul>
 

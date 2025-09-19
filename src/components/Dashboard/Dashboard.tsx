@@ -20,10 +20,10 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="w-96 h-fit bg-blue-200 flex flex-col gap-2 p-3 absolute bottom-5 left-[50%] transform-[translateX(-50%)] rounded-md shadow-md">
+      <div className="w-96 h-fit bg-base-100 flex flex-col gap-2 p-3 absolute bottom-5 left-[50%] transform-[translateX(-50%)] rounded-lg shadow-lg">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Tableau de bord</span>
-          <div className="flex items-center gap-1 rounded-full bg-white/70 px-2 py-0.5 text-xs shadow">
+          <div className="flex items-center gap-1 rounded-full bg-base-200 px-2 py-0.5 text-xs shadow">
             <FaSlidersH className="h-3 w-3" />
             <span>Niveau : {levelDisplay[level]}</span>
           </div>

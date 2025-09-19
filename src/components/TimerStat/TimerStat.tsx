@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Stat from "../Stat/Stat";
-import { MdTimer } from "react-icons/md";
+import { RiTimerLine } from "react-icons/ri";
 import { useGameStatsStore } from "../../stores/GameStatsStore";
 import { IoMdPause } from "react-icons/io";
 
@@ -40,7 +40,7 @@ export default function TimerStat() {
   return (
     <div className="relative">
       <Stat
-        icon={MdTimer}
+        icon={RiTimerLine}
         label="Temps écoulé"
         value={`${hrs}:${mins}:${secs}`}
       />
