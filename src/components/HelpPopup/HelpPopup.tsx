@@ -54,20 +54,8 @@ const HelpPopup: React.FC<HelpPopupProps> = ({ onClose }) => {
             coup
           </li>
           <li>
-            <kbd className="kbd">Ctrl + Y</kbd> : Rétablir un coup
-            annulé
-          </li>
-          <li>
             <kbd className="kbd">P</kbd> : Mettre le jeu en pause /
             reprendre
-          </li>
-          <li>
-            <kbd className="kbd">Flèches ← →</kbd> : Naviguer entre
-            les colonnes
-          </li>
-          <li>
-            <kbd className="kbd">Entrée</kbd> : Sélectionner ou
-            poser une carte
           </li>
         </ul>
       </div>
