@@ -6,8 +6,10 @@ import { GameSurface } from "./components/GameSurface/GameSurface";
 import { usePopupStore } from "./stores/PopupStore";
 import PopupManager from "./components/PopupManager/PopupManager";
 import "./app.css";
+import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 
 function App() {
+  useKeyboardShortcuts();
   const columns = useColumnsStore((state) => state.columns);
   const isGameWon = useColumnsStore((state) => state.isGameWon);
   const isGameOver = useColumnsStore((state) => state.isGameOver);
